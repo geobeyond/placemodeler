@@ -118,7 +118,7 @@ Ext.define('PM.view.MapPanel', {
 
         //overlays
         this.wms1= new OpenLayers.Layer.WMS(
-            "Analisi tradizionale", "http://89.31.77.165/geoserver/divater/wms",
+            "Analisi anticipatoria", "http://89.31.77.165/geoserver/divater/wms",
             {
                 LAYERS: 'divater:pm_phase1',
                 STYLES: '',
@@ -306,18 +306,35 @@ Ext.define('PM.view.MapPanel', {
 		    }
 	 });
 
+	var featureInfoControl4= new OpenLayers.Control.WMSGetFeatureInfo({
+                url: 'http://89.31.77.165/geoserver/divater/wms',
+                layers: [this.wms1,this.wms3],
+		infoFormat:'application/json',
+                queryVisible: true,
+         });
+
+	featureInfoControl4.events.register("getfeatureinfo", this, function(e){
+	            that.clearAllHighlight();
+		    var d = Ext.JSON.decode(e.text);
+                    if(d.features && d.features.length > 0)
+		    {
+		      that.createPolygon(d.features[0].geometry.coordinates);
+		    }
+	}); 
+
 	 this.map.addControl(this.selectControl);
 	 this.map.addControl(this.selectControl3);
 	this.map.addControl(featureInfoControl2);
+	this.map.addControl(featureInfoControl4);
 
-	this.actionSelect = Ext.create('GeoExt.Action', {
+	this.actionSelect1 = Ext.create('GeoExt.Action', {
 	    text: "<i class=\"fa fa-magic\"></i> seleziona",
 	    control:  this.selectControl,
 	    map: that.map,
 	    toggleGroup: "draw",
 	    enableToggle: false,
 	   // group: "draw",
-	    id:'btnSelect',
+	    id:'btnSelect1',
 	    tooltip: "seleziona simbolo"
 	});
 	
@@ -340,6 +357,17 @@ Ext.define('PM.view.MapPanel', {
 	    enableToggle: false,
 	  //  group: "draw",
 	    id:'btnGetFeatureInfo2',
+	    tooltip: "seleziona simbolo"
+	});
+
+	this.actionGetfeatureInfo4 = Ext.create('GeoExt.Action', {
+	    text: "<i class=\"fa fa-magic\"></i> seleziona",
+	    control:  featureInfoControl4,
+	    map: that.map,
+	    toggleGroup: "draw",
+	    enableToggle: false,
+	  //  group: "draw",
+	    id:'btnGetFeatureInfo4',
 	    tooltip: "seleziona simbolo"
 	});
 
@@ -366,9 +394,10 @@ Ext.define('PM.view.MapPanel', {
 	this.toolbarItems.push(Ext.create('Ext.button.Button', actionMaxExtent));
 	this.toolbarItems.push(Ext.create('Ext.button.Button', actionNav));
 
-	this.btnSelect=Ext.create('Ext.button.Button', this.actionSelect);
+	this.btnSelect1=Ext.create('Ext.button.Button', this.actionSelect1);
 	this.btnGetFeatureInfo2=Ext.create('Ext.button.Button', this.actionGetfeatureInfo2);
 	this.btnSelect3=Ext.create('Ext.button.Button', this.actionSelect3);
+	this.btnGetFeatureInfo4=Ext.create('Ext.button.Button', this.actionGetfeatureInfo4);
 	
 
 	var infoBtn=Ext.create('Ext.Button', {
@@ -386,9 +415,10 @@ Ext.define('PM.view.MapPanel', {
 	this.toolbarItems.push(infoBtn);
 	this.toolbarItems.push("-");
 	
-	this.toolbarItems.push(this.btnSelect);
+	this.toolbarItems.push(this.btnSelect1);
 	this.toolbarItems.push(this.btnGetFeatureInfo2); 
 	this.toolbarItems.push(this.btnSelect3);
+	this.toolbarItems.push(this.btnGetFeatureInfo4); 
 
 	//toolbarItems.push(Ext.create('Ext.button.Button', actionDelete));
 	this.toolbarItems.push("-");

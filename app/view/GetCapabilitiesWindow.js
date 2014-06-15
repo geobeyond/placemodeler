@@ -4,7 +4,7 @@ Ext.define('PM.view.GetCapabilitiesWindow', {
     extend: 'Ext.window.Window',
     border:false,
     
-    title: 'Add Layer',
+    title: 'Aggiungi un livello',
     layout: 'fit',
 
     height: 400,
@@ -28,23 +28,23 @@ Ext.define('PM.view.GetCapabilitiesWindow', {
       items:[{
 	xtype: 'button',
 	cls: 'localBtn',
-	text:'carica da locale', colspan:2
+	text:'carica da server locale', colspan:2
       },{
 	xtype: 'button',
 	cls:'urlBtn',
-	text:'carica da url'
+	text:'carica da server remoto'
       },{
 	xtype: 'textfield',
 	name: 'url',
 	vtype:'url',
-	width: 350
+	width: 270
       },{
 	colspan:2,
 	xtype: 'grid',
-	title: "WMS Capabilities",     
+	title: "Catalogo del server",     
             columns: [
-                {header: "Title", dataIndex: "title", width:80,sortable: true},
-                {header: "Name", dataIndex: "name", width:100, sortable: true},
+                {header: "Title", dataIndex: "title", width:150,sortable: true},
+                {header: "Name", dataIndex: "name", width:200, sortable: true},
                 //{header: "Queryable", dataIndex: "queryable", sortable: true, width: 70},
                 //{id: "description", header: "Description", dataIndex: "abstract", flex: 1}
             ],        

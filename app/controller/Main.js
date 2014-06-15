@@ -12,13 +12,16 @@ Ext.define('PM.controller.Main', {
         selector: 'mappanel'
     },{
         ref: 'panelfase1',
-	selector: 'panelFase1'
+		selector: 'panelFase1'
     },{
         ref: 'panelfase2',
-	selector: 'panelFase2'
+		selector: 'panelFase2'
     },{
         ref: 'panelfase3',
-	selector: 'panelFase3'
+		selector: 'panelFase3'
+    },{
+        ref: 'panelfase4',
+		selector: 'panelFase4'
     },{
         ref: 'container1',
         selector: 'panelFase1 > container[cls=tree]'
@@ -32,8 +35,8 @@ Ext.define('PM.controller.Main', {
         ref: 'container4',
         selector: 'panelFase4 > container[cls=tree]'
     },{
-      ref: 'btnRemove',
-      selector:'button[text=remove]'
+      	ref: 'btnRemove',
+      	selector:'button[text=remove]'
     },{
         ref: 'buttonFase1',
         selector: 'panelFase1 > button'
@@ -57,10 +60,10 @@ Ext.define('PM.controller.Main', {
 	    },
 	  'panelFase3':{
 	      expand: this.onAccordionExpand
-	    },/*
+	    },
 	  'panelFase4':{
 	      expand: this.onAccordionExpand
-	    },
+	    },/*
 	   'panelFase5':{
 	      expand: this.onAccordionExpand
 	    },
@@ -92,8 +95,9 @@ Ext.define('PM.controller.Main', {
     onViewportAfterRender: function(){
       var mappanel=this.getMappanel();
       	  Ext.getCmp('btnGetFeatureInfo2').getEl().hide();
-	  Ext.getCmp('btnSelect').getEl().show();
-	  Ext.getCmp('btnSelect3').getEl().hide();
+      	  Ext.getCmp('btnGetFeatureInfo4').getEl().hide();
+		  Ext.getCmp('btnSelect1').getEl().show();
+		  Ext.getCmp('btnSelect3').getEl().hide();
 	 
 	mappanel.tree.getDockedItems()[0].setVisible(false);
 
@@ -116,10 +120,12 @@ Ext.define('PM.controller.Main', {
       mappanel.removeAllOverlayers();
       
       this.resetPanelFase2();
+      this.resetPanelFase4();
       switch(fase){
 	case 1:
 	  Ext.getCmp('btnGetFeatureInfo2').getEl().hide();
-	  Ext.getCmp('btnSelect').getEl().show();
+	  Ext.getCmp('btnGetFeatureInfo4').getEl().hide();
+	  Ext.getCmp('btnSelect1').getEl().show();
 	  Ext.getCmp('btnSelect3').getEl().hide();
 	  
 	  
@@ -133,7 +139,8 @@ Ext.define('PM.controller.Main', {
 	  break;
 	case 2:
 	  Ext.getCmp('btnGetFeatureInfo2').getEl().show();
-	  Ext.getCmp('btnSelect').getEl().hide();
+	  Ext.getCmp('btnGetFeatureInfo4').getEl().hide();
+	  Ext.getCmp('btnSelect1').getEl().hide();
 	  Ext.getCmp('btnSelect3').getEl().hide();
 	  
 	  Ext.getCmp('drawMenu').getEl().hide();
@@ -152,7 +159,8 @@ Ext.define('PM.controller.Main', {
 	  break;
 	case 3:
 	  Ext.getCmp('btnGetFeatureInfo2').getEl().hide();
-	  Ext.getCmp('btnSelect').getEl().hide();
+	  Ext.getCmp('btnGetFeatureInfo4').getEl().hide();
+	  Ext.getCmp('btnSelect1').getEl().hide();
 	  Ext.getCmp('btnSelect3').getEl().show();
 	  
 	  Ext.getCmp('drawMenu').getEl().show();	  	  
@@ -164,16 +172,20 @@ Ext.define('PM.controller.Main', {
 	  mappanel.tree.getDockedItems()[0].setVisible(true);
 	case 4:
 	  Ext.getCmp('btnGetFeatureInfo2').getEl().hide();
-	  Ext.getCmp('btnSelect').getEl().hide();
-	  Ext.getCmp('btnSelect3').getEl().show();
+	  Ext.getCmp('btnGetFeatureInfo4').getEl().show();
+	  Ext.getCmp('btnSelect1').getEl().hide();
+	  Ext.getCmp('btnSelect3').getEl().hide();
 	  
-	  Ext.getCmp('drawMenu').getEl().hide();	  	  
+	  Ext.getCmp('drawMenu').getEl().hide();
+
+	  mappanel.clearAllHighlight();	  	  
 	  
-      mappanel.map.addLayer(mappanel.wfs3);
-	  mappanel.removeHighlightLayer();
+      mappanel.map.addLayer(mappanel.wms1);
+      mappanel.map.addLayer(mappanel.wms3);
+	  mappanel.map.addLayer(mappanel.highlightLayer);
 	  	  	  
 	  this.getContainer4().add(mappanel.tree);	
-	  mappanel.tree.getDockedItems()[0].setVisible(true);
+	  mappanel.tree.getDockedItems()[0].setVisible(false);
 	  break;	  
 	  break;
 	default:
@@ -223,6 +235,12 @@ Ext.define('PM.controller.Main', {
     },
     
     resetPanelFase2: function(){
+      var panel=this.getPanelfase2();
+      panel.items.items[1].reset();
+      panel.items.items[2].setDisabled(true);
+    },
+
+    resetPanelFase4: function(){
       var panel=this.getPanelfase2();
       panel.items.items[1].reset();
       panel.items.items[2].setDisabled(true);

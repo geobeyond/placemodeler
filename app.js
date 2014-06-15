@@ -26,6 +26,7 @@ Ext.application({
       'Report',
       'PanelFase1',
       'PanelFase2',
+      'PanelFase3',
       'PanelFase4',
       'PanelFaseX',   
     ],
