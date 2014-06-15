@@ -37,10 +37,10 @@ Ext.define('PM.view.MapPanel', {
 
     layers: [new OpenLayers.Layer.Google("Google Physical",{type: google.maps.MapTypeId.TERRAIN, isBaseLayer: true}),
 
-	     new OpenLayers.Layer.Google("Google Streets", {numZoomLevels: 20, isBaseLayer: true}),
+		     new OpenLayers.Layer.Google("Google Streets", {numZoomLevels: 20, isBaseLayer: true}),
 
-	     new OpenLayers.Layer.Google("Google Hybrid", {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20, isBaseLayer: true}),
-	     new OpenLayers.Layer.Google("Google Satellite", {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22, isBaseLayer: true})
+		     new OpenLayers.Layer.Google("Google Hybrid", {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20, isBaseLayer: true}),
+		     new OpenLayers.Layer.Google("Google Satellite", {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22, isBaseLayer: true})
 
             ],
 
@@ -117,7 +117,7 @@ Ext.define('PM.view.MapPanel', {
 	//this.map.addLayer(this.highlightLayer);
 
         //overlays
-        this.pmLayer= new OpenLayers.Layer.WMS(
+        this.wms1= new OpenLayers.Layer.WMS(
             "Analisi tradizionale", "http://89.31.77.165/geoserver/divater/wms",
             {
                 LAYERS: 'divater:pm_phase1',
@@ -292,7 +292,7 @@ Ext.define('PM.view.MapPanel', {
 	
 	 var featureInfoControl= new OpenLayers.Control.WMSGetFeatureInfo({
                 url: 'http://89.31.77.165/geoserver/divater/wms',
-                layers: [this.pmLayer],
+                layers: [this.wms1],
 		infoFormat:'application/json',
                 queryVisible: true,
          });
