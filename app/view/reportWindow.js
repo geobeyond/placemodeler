@@ -91,20 +91,3 @@ Ext.define('PM.view.ReportWindow', {
 
 
 });
- id:'incident_category',
-							 name: 'incident_category',
-							 value: '4'
-						}
-					]
-	 	       }	
-      ]
-    }],
-    
-    buttons:[{
-      text: 'Annulla'
-    },{
-      text: 'Invia Report'
-    }]
-
-    
-}); 

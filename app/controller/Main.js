@@ -256,6 +256,7 @@ Ext.define('PM.controller.Main', {
 
     gestSelected: function(feature){
      // alert('visualizza dati sotto alla mappa?');
+	this.getMappanel().selectedFeature=feature.fid;
         this.getButtonFase1().setDisabled(false);
     },
 

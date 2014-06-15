@@ -2,18 +2,12 @@ Ext.define('PM.controller.Report', {
 
     extend: 'Ext.app.Controller', 
     
-    refs:[/*{
-      ref: 'radiogroupFase2',
-      selector: 'panelFase2 > radiogroup'
-    }*/],
+    refs:[],
     
    
     
     init: function(){
-      this.control({
-	/*'panelFase2 > radiogroup':{
-	  afterrender: this.onAfterRenderRadioGroupFase2
-	}*/
+      this.control({	
       });
     },
     
@@ -28,8 +22,23 @@ Ext.define('PM.controller.Report', {
 	},
 	success: function(response){
 	  res=Ext.JSON.decode(response.responseText);
-	  callback(res.contents.payload, res.contents.error);
+	  callback(res.contents.error, res.contents.payload);
 	}
       });
     },
+    /*
+    createCustomForm: function(err, res){
+ 	if (err.code!=='0')
+	{
+	  console.log('Ushahidi api error: '+ err.message);
+	  return;
+	}
+	else
+	{
+	  for (var i=0; i < res.customforms.length; i++)
+	  {
+	    
+	  }
+	}
+    }*/
 });

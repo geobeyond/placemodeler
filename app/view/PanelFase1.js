@@ -29,7 +29,9 @@ Ext.define('PM.view.PanelFase1', {
         {
 	    this.sWin = Ext.create('PM.view.ReportWindow', {
 	        title: 'Standard Report',
-	        feature: f
+		id: 'reportFase1',
+	        feature: f, //???
+		
 	    });
         }
         this.sWin.show();

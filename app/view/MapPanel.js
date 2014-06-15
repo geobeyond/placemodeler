@@ -53,6 +53,7 @@ Ext.define('PM.view.MapPanel', {
 	OpenLayers.ProxyHost = "wfsProxy.php?url=";
 
 
+	this.selectedFeature=null;
 
          /*var utmProj =  new OpenLayers.Projection("EPSG:32633");
          var googleProj =  new OpenLayers.Projection("EPSG:900913");*/
@@ -278,7 +279,7 @@ Ext.define('PM.view.MapPanel', {
 	    toggleKey: "ctrlKey",
 	    box: false
 	});
-	this.selectControl.events.register("featureunhighlighted", this.selectControl, function(e){});
+	//this.selectControl.events.register("featureunhighlighted", this.selectControl, function(e){});
 
 	this.selectControl3=new OpenLayers.Control.SelectFeature(that.wfs3, {
 	    clickout: true, toggle: false,
@@ -287,7 +288,7 @@ Ext.define('PM.view.MapPanel', {
 	    box: false
 	});
 	
-	this.selectControl3.events.register("featureunhighlighted", this.selectControl3, function(e){});
+	//this.selectControl3.events.register("featureunhighlighted", this.selectControl3, function(e){});
 	
 	 var featureInfoControl= new OpenLayers.Control.WMSGetFeatureInfo({
                 url: 'http://89.31.77.165/geoserver/divater/wms',

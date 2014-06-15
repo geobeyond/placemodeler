@@ -29,5 +29,18 @@ Ext.define('PM.view.PanelFase2', {
             disabled: true,
             enableToggle: true,
 	}
-    ]   
+    ],
+    
+     openReportWindow: function(title){
+        if(!this.sWin && typeof sWin==='undefined')
+        {
+	    this.sWin = Ext.create('PM.view.ReportWindow', {
+	        title: title,
+		id: 'reportFase1',
+	        feature: f, //???
+		
+	    });
+        }
+        this.sWin.show();
+    },
 });

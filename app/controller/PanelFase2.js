@@ -8,6 +8,9 @@ Ext.define('PM.controller.PanelFase2', {
       ref: 'button',
       selector: 'panelFase2 > button'
     },{
+        ref: 'panelfase2',
+	selector: 'panelFase2'
+    },{
       ref: 'radiogroupFase2',
       selector: 'panelFase2 > radiogroup'
     }],
@@ -17,13 +20,16 @@ Ext.define('PM.controller.PanelFase2', {
             'panelFase2 > radiogroup':{
 	      afterrender: this.onAfterRenderRadioGroupFase2,
               change: this.onRadioChange
+            },
+	    'panelFase2 > button':{
+              click: this.onBtnClick
             }
         });
     },
 
     onAfterRenderRadioGroupFase2: function(){
       var that=this;
-      PM.app.getController('Report').getUshahidiApi('customforms', 'all', '', function(res, err){
+      PM.app.getController('Report').getUshahidiApi('customforms', 'all', '', function(err, res){
 	if (err.code!=='0')
 	{
 	  console.log('Ushahidi api error: '+ err.message);
@@ -50,6 +56,11 @@ Ext.define('PM.controller.PanelFase2', {
     onRadioChange: function(o, v){
       //var value=value.radioFase2;
         this.getButton().setDisabled(false);
+    },
+    
+    onBtnClick: function(){
+      //var title=this.getRadiogroupFase2();
+      //this.getPanelfase2().openReportWindow(title);
     }
 
 });

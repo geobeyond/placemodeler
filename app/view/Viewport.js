@@ -23,7 +23,7 @@ Ext.define('PM.view.Viewport', {
 	layout: 'accordion',
         collapsible: true,
         width: 250,
-	items:[{xtype:'panelFase1'},{xtype:'panelFase2'},{xtype:'panelFase3'},{xtype:'panelFaseX'}]
+	items:[{xtype:'panelFase1'},{xtype:'panelFase2'},{xtype:'panelFase3'},{xtype:'panelFase4'},{xtype:'panelFaseX'}]
     },{
         region: 'center',
         layout: 'border',   
