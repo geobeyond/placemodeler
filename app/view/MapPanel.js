@@ -290,14 +290,14 @@ Ext.define('PM.view.MapPanel', {
 	
 	//this.selectControl3.events.register("featureunhighlighted", this.selectControl3, function(e){});
 	
-	 var featureInfoControl= new OpenLayers.Control.WMSGetFeatureInfo({
+	 var featureInfoControl2= new OpenLayers.Control.WMSGetFeatureInfo({
                 url: 'http://89.31.77.165/geoserver/divater/wms',
                 layers: [this.wms1],
 		infoFormat:'application/json',
                 queryVisible: true,
          });
 
-	 featureInfoControl.events.register("getfeatureinfo", this, function(e){
+	 featureInfoControl2.events.register("getfeatureinfo", this, function(e){
 	            that.clearAllHighlight();
 		    var d = Ext.JSON.decode(e.text);
                     if(d.features && d.features.length > 0)
@@ -308,49 +308,49 @@ Ext.define('PM.view.MapPanel', {
 
 	 this.map.addControl(this.selectControl);
 	 this.map.addControl(this.selectControl3);
-	this.map.addControl(featureInfoControl);
+	this.map.addControl(featureInfoControl2);
 
 	this.actionSelect = Ext.create('GeoExt.Action', {
-	    text: "<i class=\"fa fa-magic\"></i> select0",
+	    text: "<i class=\"fa fa-magic\"></i> seleziona",
 	    control:  this.selectControl,
 	    map: that.map,
 	    toggleGroup: "draw",
 	    enableToggle: false,
 	   // group: "draw",
 	    id:'btnSelect',
-	    tooltip: "select feature"
+	    tooltip: "seleziona simbolo"
 	});
 	
 	this.actionSelect3 = Ext.create('GeoExt.Action', {
-	    text: "<i class=\"fa fa-magic\"></i> select2",
+	    text: "<i class=\"fa fa-magic\"></i> seleziona",
 	    control:  this.selectControl3,
 	    map: that.map,
 	    toggleGroup: "draw",
 	    enableToggle: false,
 	  //  group: "draw",
 	    id:'btnSelect3',
-	    tooltip: "select feature"
+	    tooltip: "seleziona simbolo"
 	});	
 	
-	this.actionGetfeatureInfo = Ext.create('GeoExt.Action', {
-	    text: "<i class=\"fa fa-magic\"></i> select1",
-	    control:  featureInfoControl,
+	this.actionGetfeatureInfo2 = Ext.create('GeoExt.Action', {
+	    text: "<i class=\"fa fa-magic\"></i> seleziona",
+	    control:  featureInfoControl2,
 	    map: that.map,
 	    toggleGroup: "draw",
 	    enableToggle: false,
 	  //  group: "draw",
-	    id:'btnGetFeatureInfo',
-	    tooltip: "select feature"
+	    id:'btnGetFeatureInfo2',
+	    tooltip: "seleziona simbolo"
 	});
 
 	var actionNav = Ext.create('GeoExt.Action', {
-	    text: "<i class=\"fa fa-arrows\"></i> nav",
+	    text: "<i class=\"fa fa-arrows\"></i> sposta",
 	    control: new OpenLayers.Control.Navigation(),
 	    map: that.map,
 	    toggleGroup: "draw",
 	    allowDepress: false,
 	    pressed: true,
-	    tooltip: "navigate",
+	    tooltip: "sposta",
 	    group: "draw",
 	    checked: true
 	});
@@ -358,8 +358,8 @@ Ext.define('PM.view.MapPanel', {
 	var actionMaxExtent = Ext.create('GeoExt.Action', {
 	    control: new OpenLayers.Control.ZoomToMaxExtent(),
 	    map: that.map,
-	    text: "<i class=\"fa  fa-arrows-alt \"></i> max extent",
-	    tooltip: "zoom to max extent"
+	    text: "<i class=\"fa  fa-arrows-alt \"></i>estendi",
+	    tooltip: "massima estensione di zoom"
 	});
 
 
@@ -367,12 +367,12 @@ Ext.define('PM.view.MapPanel', {
 	this.toolbarItems.push(Ext.create('Ext.button.Button', actionNav));
 
 	this.btnSelect=Ext.create('Ext.button.Button', this.actionSelect);
+	this.btnGetFeatureInfo2=Ext.create('Ext.button.Button', this.actionGetfeatureInfo2);
 	this.btnSelect3=Ext.create('Ext.button.Button', this.actionSelect3);
-	this.btnGetFeatureInfo=Ext.create('Ext.button.Button', this.actionGetfeatureInfo);
 	
 
 	var infoBtn=Ext.create('Ext.Button', {
-	    text: '<i class="fa fa-info"> </i> Open info panel',
+	    text: '<i class="fa fa-info"> </i> Modifica simbolo',
 	    renderTo: Ext.getBody(),
 	    handler: function() {
 		fs=false;
@@ -380,14 +380,14 @@ Ext.define('PM.view.MapPanel', {
 		if (fs) {
 		    if (Ext.getCmp("featInfo").collapsed) Ext.getCmp("featInfo").expand();
 		    else Ext.getCmp("featInfo").collapse();
-		}else alert('Nessuna feature selezionata');
+		}else alert('Nessun simbolo selezionata');
 	    }
 	});
 	this.toolbarItems.push(infoBtn);
 	this.toolbarItems.push("-");
 	
 	this.toolbarItems.push(this.btnSelect);
-	this.toolbarItems.push(this.btnGetFeatureInfo); 
+	this.toolbarItems.push(this.btnGetFeatureInfo2); 
 	this.toolbarItems.push(this.btnSelect3);
 
 	//toolbarItems.push(Ext.create('Ext.button.Button', actionDelete));
@@ -395,16 +395,16 @@ Ext.define('PM.view.MapPanel', {
 	ctrl = new OpenLayers.Control.NavigationHistory();
 	this.map.addControl(ctrl);
 	var actionPrev = Ext.create('GeoExt.Action', {
-	    text: "previous",
+	    text: "prec",
 	    control: ctrl.previous,
 	    disabled: true,
-	    tooltip: "previous in history"
+	    tooltip: "vista precedente"
 	});
 	var actionNext = Ext.create('GeoExt.Action', {
-	    text: "next",
+	    text: "succ",
 	    control: ctrl.next,
 	    disabled: true,
-	    tooltip: "next in history"
+	    tooltip: "vista successiva"
 	});
 
 	this.toolbarItems.push(Ext.create('Ext.button.Button', actionPrev));
@@ -414,7 +414,7 @@ Ext.define('PM.view.MapPanel', {
 
 
 	var actionDrawLine = Ext.create('GeoExt.Action', {
-	    text: "<i class=\"fa fa-angle-left \"></i> line",
+	    text: "<i class=\"fa fa-angle-left \"></i> linea",
 	    control: new OpenLayers.Control.DrawFeature(this.vector, OpenLayers.Handler.Path),
 	    id: 'fase1-button-line',
 	    map: this.map,
@@ -425,7 +425,7 @@ Ext.define('PM.view.MapPanel', {
 	});
 
 	var actionDrawPoly = Ext.create('GeoExt.Action', {
-	    text: "<i class=\"fa fa-square-o\"></i> poly",
+	    text: "<i class=\"fa fa-square-o\"></i> poligono",
 	    control: new OpenLayers.Control.DrawFeature(this.vector, OpenLayers.Handler.Polygon),
 	    id: 'fase1-button-poly',
 	    map: this.map,
@@ -436,7 +436,7 @@ Ext.define('PM.view.MapPanel', {
 	});
 
 	var actionDrawPoint = Ext.create('GeoExt.Action', {
-	    text: "<i class=\"fa fa-map-marker\"></i> point",
+	    text: "<i class=\"fa fa-map-marker\"></i> punto",
 	    control: new OpenLayers.Control.DrawFeature(this.vector, OpenLayers.Handler.Point),
 	    id: 'fase1-button-point',
 	    map: this.map,

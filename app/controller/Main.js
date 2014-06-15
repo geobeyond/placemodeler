@@ -91,7 +91,7 @@ Ext.define('PM.controller.Main', {
 
     onViewportAfterRender: function(){
       var mappanel=this.getMappanel();
-      	  Ext.getCmp('btnGetFeatureInfo').getEl().hide();
+      	  Ext.getCmp('btnGetFeatureInfo2').getEl().hide();
 	  Ext.getCmp('btnSelect').getEl().show();
 	  Ext.getCmp('btnSelect3').getEl().hide();
 	 
@@ -118,7 +118,7 @@ Ext.define('PM.controller.Main', {
       this.resetPanelFase2();
       switch(fase){
 	case 1:
-	  Ext.getCmp('btnGetFeatureInfo').getEl().hide();
+	  Ext.getCmp('btnGetFeatureInfo2').getEl().hide();
 	  Ext.getCmp('btnSelect').getEl().show();
 	  Ext.getCmp('btnSelect3').getEl().hide();
 	  
@@ -132,7 +132,7 @@ Ext.define('PM.controller.Main', {
 
 	  break;
 	case 2:
-	  Ext.getCmp('btnGetFeatureInfo').getEl().show();
+	  Ext.getCmp('btnGetFeatureInfo2').getEl().show();
 	  Ext.getCmp('btnSelect').getEl().hide();
 	  Ext.getCmp('btnSelect3').getEl().hide();
 	  
@@ -145,13 +145,13 @@ Ext.define('PM.controller.Main', {
 	  
 	  mappanel.clearAllHighlight();
 	  
-          mappanel.map.addLayer(mappanel.pmLayer);
+          mappanel.map.addLayer(mappanel.wms1);
           mappanel.map.addLayer(mappanel.highlightLayer);
 	   
 	   this.getContainer2().add(mappanel.tree);
 	  break;
 	case 3:
-	  Ext.getCmp('btnGetFeatureInfo').getEl().hide();
+	  Ext.getCmp('btnGetFeatureInfo2').getEl().hide();
 	  Ext.getCmp('btnSelect').getEl().hide();
 	  Ext.getCmp('btnSelect3').getEl().show();
 	  
@@ -163,7 +163,7 @@ Ext.define('PM.controller.Main', {
 	  this.getContainer3().add(mappanel.tree);	
 	  mappanel.tree.getDockedItems()[0].setVisible(true);
 	case 4:
-	  Ext.getCmp('btnGetFeatureInfo').getEl().hide();
+	  Ext.getCmp('btnGetFeatureInfo2').getEl().hide();
 	  Ext.getCmp('btnSelect').getEl().hide();
 	  Ext.getCmp('btnSelect3').getEl().show();
 	  
