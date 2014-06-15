@@ -1,14 +1,3 @@
-/*Ext.require(['Ext.form.FieldSet',
- 'Ext.form.field.*',
- 'Ext.data.*',
- 'GeoExt.Action',
- 'PM.view.CustomLayerTree'
-
- //	     'gxp.plugins.LayerTree'
-
- ]);
- */
-
 Ext.define('PM.view.PanelFase1', {
     extend: 'Ext.panel.Panel',
     alias : 'widget.panelFase1',
@@ -27,66 +16,35 @@ Ext.define('PM.view.PanelFase1', {
         },
 	{
 	    xtype:'button',
-	    text: '<i class="fa fa-comment"></i> Invia standard report',
+	    text: '<i class="fa fa-comment"></i> Crea standard report',
 	    tooltip: "Invia gli elementi selezionati",
             margin: '20 5 5 10' ,
             disabled: true,
             enableToggle: true,
-	    /*handler: function() {
-		if (getSelectedFeaturesCount()==0) {
-		    alert("Nessun elemento selezionato!");
-		}
-		else {
-		    showSelectedForm(2);
-		}
-	    }*/
 	}
-    ]
-});
+    ],
+    
+     openReportWindow: function(f){
+        if(!this.sWin && typeof sWin==='undefined')
+        {
+	    this.sWin = Ext.create('PM.view.ReportWindow', {
+	        title: 'Standard Report',
+	        feature: f
+	    });
+        }
+        this.sWin.show();
+    },
 
-var buttonsDrawable=false;
-var buttonsDrawed=false;
-var reportPanelDrawable=false;
-var reportPanelDrawed=false;
-var pageLoaded=false;
 
 /*
- Ext.onReady(function(){
+    hideReportWindow: function(){
+        if (this.sWin && typeof this.sWin==='object')
+	{
+	    this.sWin.destroy();
+	    this.sWin=null;
+	}
 
- buttonsDrawable=true;
- if (reportPanelDrawable && !reportPanelDrawed) reportPanelDraw();
- //   if (buttonsDrawable && checkAllLayersLoaded()) drawButtons();
- pageLoaded=true;
- });*/
-
-
-
-
-var actionSelect;
-var selectControl;
-var actionDelete;
-var actionSubmit;
+    }*/
+});
 
 
-function drawButtons(){
-    if (buttonsDrawed) return;
-    buttonsDrawed=true;
-    buttonsDrawFieldset=Ext.getCmp('fase1-draw-buttons');
-    map.addControl(new OpenLayers.Control.LayerSwitcher({
-	'div':OpenLayers.Util.getElement('layers-div')
-    }));
-}
-
-function formTypeSelect(){
-    if (Ext.getCmp('fase1-form-type-selection-Window')){
-	Ext.getCmp('fase1-form-type-selection-Window').destroy();
-    }
-    Ext.create('Ext.window.Window', {
-	title: '<i class="fa fa-sitemap"></i> Selezione il tipo di form',
-	id: 'fase1-form-type-selection-Window',
-	layout: 'fit',
-	items: [
-
-	]
-    }).show();
-}

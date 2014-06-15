@@ -5,19 +5,19 @@ Ext.define('PM.controller.PanelFase1', {
     views:['PanelFase1'],
 
     refs:[{
-        ref: 'button',
-        selector: 'panelFase1 > button'
+        ref: 'panelfase1',
+	selector: 'panelFase1'
     }],
 
     init: function(){ this.control({
-            'panelFase1':{
-              //  afterrender: this.onBeforeRender
+            'panelFase1 > button':{
+              click: this.onBtnClick
             }
         });
     },
 
-    beforeRender: function(o, eopts){
-        alert('bef rend');
+    onBtnClick: function(){
+        this.getPanelfase1().openReportWindow();
     }
 
 });

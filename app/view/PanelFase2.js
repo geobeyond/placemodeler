@@ -1,47 +1,33 @@
-/*Ext.require(['Ext.form.FieldSet',
- 'Ext.form.field.*',
- 'Ext.data.*',
- 'GeoExt.Action',
- 'PM.view.CustomLayerTree'
-
- //	     'gxp.plugins.LayerTree'
-
- ]);
- */
-
 Ext.define('PM.view.PanelFase2', {
     extend: 'Ext.panel.Panel',
     alias : 'widget.panelFase2',
+
+    layout: {
+        type: 'vbox',
+        align : 'stretch'
+    },
 
     title: 'Fase 2',
     //   bodyPadding: 5,
     //   autoScroll: true,
     items:[
-	/*{
-	 xtype: 'panel',
-	 title: '<i class="fa fa-folder-open"></i> Layers',
-	 items:[{
-	 xtype: 'fieldset',
-	 id: 'layers-div',
-	 padding: '5px'
-	 }]
-	 },*/
         {
            xtype: 'container',      
 	   cls:'tree'
         },
 	{
-	    xtype:'button',
-	    text: '<i class="fa fa-comment"></i> Invia standard report',
+	  xtype: 'radiogroup',
+	  margin: '20 2 2 2' ,
+	  columns: 1,
+          vertical: true	   
+	},
+	{
+	   xtype:'button',
+	    text: '<i class="fa fa-comment"></i> Crea Report',
 	    tooltip: "Invia gli elementi selezionati",
-	    handler: function() {
-		if (getSelectedFeaturesCount()==0) {
-		    alert("Nessun elemento selezionato!");
-		}
-		else {
-		    showSelectedForm(2);
-		}
-	    }
+            margin: '20 5 5 10' ,
+            disabled: true,
+            enableToggle: true,
 	}
-    ]
+    ]   
 });

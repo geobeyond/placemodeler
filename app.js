@@ -12,10 +12,10 @@ Ext.application({
     name: 'PM',
 
     requires:[
-                     'GeoExt.tree.View',
+               'GeoExt.tree.View',
                'GeoExt.tree.Column',               
                'GeoExt.data.LayerStore',
-             //  'GeoExt.tree.LayerTreeBuilder',
+             //'GeoExt.tree.LayerTreeBuilder',
     ],
 
 
@@ -23,7 +23,10 @@ Ext.application({
       'Main', 
       'SaveFeature',
       'GetCapabilities',
-      'Map',
+      'Report',
+      'PanelFase1',
+      'PanelFase2',
+      'PanelFase4',
       'PanelFaseX',   
     ],
     

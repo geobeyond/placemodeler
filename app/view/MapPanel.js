@@ -117,7 +117,7 @@ Ext.define('PM.view.MapPanel', {
 
         //overlays
         this.pmLayer= new OpenLayers.Layer.WMS(
-            "Placemaker", "http://89.31.77.165/geoserver/divater/wms",
+            "Analisi tradizionale", "http://89.31.77.165/geoserver/divater/wms",
             {
                 LAYERS: 'divater:pm_phase1',
                 STYLES: '',
@@ -132,10 +132,26 @@ Ext.define('PM.view.MapPanel', {
                 isBaseLayer: false,
                 yx : {'EPSG:4326' : true}
             });
+        this.wms3= new OpenLayers.Layer.WMS(
+            "Analisi tradizionale", "http://89.31.77.165/geoserver/divater/wms",
+            {
+                LAYERS: 'divater:pm_phase3',
+                STYLES: '',
+                format: 'image/png',
+                tiled: true,
+                transparent: true,
+                tilesOrigin : this.maxExtent.left + ',' + this.maxExtent.bottom
+            },
+            {
+                buffer: 0,
+                displayOutsideMaxExtent: true,
+                isBaseLayer: false,
+                yx : {'EPSG:4326' : true}
+            });	
       this.vector = new OpenLayers.Layer.Vector("Elementi aggiunti");
 
 
-	this.wfs1 = new OpenLayers.Layer.Vector("Selectable wfs1", {
+	this.wfs1 = new OpenLayers.Layer.Vector("Analisi anticipatoria", {
 	    strategies: [new OpenLayers.Strategy.BBOX(), this.saveStrategy],
 	    //styleMap: sm,
 	    projection: new OpenLayers.Projection("EPSG:4326"),
@@ -146,7 +162,7 @@ Ext.define('PM.view.MapPanel', {
 	    })
 	});
 
-	this.wfs3 = new OpenLayers.Layer.Vector("Selectable wfs3", {
+	this.wfs3 = new OpenLayers.Layer.Vector("Analisi tradizionale", {
 	    strategies: [new OpenLayers.Strategy.BBOX(), this.saveStrategy],
 	    //styleMap: sm,
 	    projection: new OpenLayers.Projection("EPSG:4326"),
@@ -187,20 +203,20 @@ Ext.define('PM.view.MapPanel', {
 		text:'rootNode',
                 children: [
                     {
+                        plugins: ['gx_overlaylayercontainer'],
+                        expanded: true,
+						text: 'Simboli'
+					}, /*{
                         plugins: [{
                             ptype: 'gx_layercontainer',
                             store: that.layers,
-			    text:'layer'
+			    		text:'Simboli'
                         }],
                         expanded: true
-                    }, {
+                    },*/ {
                         plugins: ['gx_baselayercontainer'],
                         expanded: true,
-                        text: "Base Maps"
-                    }, {
-                        plugins: ['gx_overlaylayercontainer'],
-                        expanded: true,
-			text: 'overlay'
+                        text: "Mappe di base"
                     }
                 ]
             }
@@ -222,15 +238,9 @@ Ext.define('PM.view.MapPanel', {
             lines: false,
             tbar: [{
                 text: "remove",
-                /*handler: function() {
-                    layer = that.map.layers[2];
-                    that.map.removeLayer(layer);
-                }*/
+		disabled: 'true'
             }, {
-                text: "add",
-                /*handler: function() {
-                    that.map.addLayer(layer);
-                }*/
+                text: "add"
             }]
         });
 

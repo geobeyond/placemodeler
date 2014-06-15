@@ -80,6 +80,10 @@ Ext.define('PM.controller.GetCapabilities', {
        
      store.load({
        callback: function(records, operation, success) {
+	 for (var i=0; i<records.length; i++)
+	 {
+	   records[i].raw.isloadedByGetCapabilities=true;
+	 }
 	 that.getGrid().getStore().loadRecords(store.getRange());
        },
     });     
@@ -87,7 +91,10 @@ Ext.define('PM.controller.GetCapabilities', {
     
     
     onGridItemDblClick: function(grid, record){
-      this.getMappanel().map.addLayer(record.getLayer().clone());   
+      var mappanel=this.getMappanel();
+      mappanel.map.removeLayer(mappanel.wfs3);
+      mappanel.map.addLayer(record.getLayer().clone());  
+      mappanel.map.addLayer(mappanel.wfs3);
       this.getGrid().getStore().remove(record);
     }
     
