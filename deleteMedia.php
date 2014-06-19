@@ -1,10 +1,10 @@
 <?php 
-$db=new PDO('mysql:host=sql.geovolution.it;dbname=geovolut37572','geovolut37572','jack76');
+$db=new PDO('mysql:host=localhost;dbname=ushahidi_v2','root','lynxbinario');
 
 if (isset($_GET['id'])){
-	$sql="delete from phase1_img where idphase1_img={$_GET['id']}";
+	$sql="delete from phase1_media where idphase1_media={$_GET['id']}";
 }else {
-	$sql="delete from  phase1_img where fk_feature='{$_GET['fid']}'";
+	$sql="delete from  phase1_media where ph1_feature='{$_GET['fid']}'";
 }
 $stmt=$db->prepare($sql);
 $db->beginTransaction();

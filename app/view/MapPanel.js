@@ -37,12 +37,10 @@ Ext.define('PM.view.MapPanel', {
 
     layers: [new OpenLayers.Layer.Google("Google Physical",{type: google.maps.MapTypeId.TERRAIN, isBaseLayer: true}),
 
-		     new OpenLayers.Layer.Google("Google Streets", {numZoomLevels: 20, isBaseLayer: true}),
+	     new OpenLayers.Layer.Google("Google Streets", {numZoomLevels: 20, isBaseLayer: true}),
 
-		     new OpenLayers.Layer.Google("Google Hybrid", {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20, isBaseLayer: true}),
-		     new OpenLayers.Layer.Google("Google Satellite", {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22, isBaseLayer: true})
-
-            ],
+	     new OpenLayers.Layer.Google("Google Hybrid", {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20, isBaseLayer: true}),
+	     new OpenLayers.Layer.Google("Google Satellite", {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22, isBaseLayer: true})],
 
 
 
@@ -50,20 +48,15 @@ Ext.define('PM.view.MapPanel', {
     initComponent: function(){
         var that=this;
 
-	OpenLayers.ProxyHost = "wfsProxy.php?url=";
+	OpenLayers.ProxyHost = PM.Config.getUrls().proxyHostWfs;
 
 
 	this.selectedFeature=null;
 
-         /*var utmProj =  new OpenLayers.Projection("EPSG:32633");
-         var googleProj =  new OpenLayers.Projection("EPSG:900913");*/
-	 this.WGS84 = new OpenLayers.Projection("EPSG:4326");
-	 this.sphericMercator = new OpenLayers.Projection("EPSG:3857");
+        this.googleProj =  new OpenLayers.Projection("EPSG:900913");
+	this.WGS84 = new OpenLayers.Projection("EPSG:4326");
+	this.sphericMercator = new OpenLayers.Projection("EPSG:3857");
 
-	  this.format = new OpenLayers.Format.GeoJSON({
-	    'internalProjection': new OpenLayers.Projection("EPSG:3857"),
-	    'externalProjection': new OpenLayers.Projection("EPSG:4326")
-	  });
 
 
         //style
@@ -75,46 +68,45 @@ Ext.define('PM.view.MapPanel', {
 	});
 
 
-	 //style per highlightLayer
-         var styleHighLightLayer = new OpenLayers.Style();
-         styleHighLightLayer.addRules([
-             new OpenLayers.Rule({
-                 symbolizer: {
-                     "Point": {
-	                 pointRadius: 4,
-	                 graphicName: "circle",
-	                 fillColor: "#FF8C00",
-	                 fillOpacity: 0.3,
-	                 strokeWidth: 1,
-	                 strokeColor: "#FF8C00"
-                     },
-                     "Line": {
-	                 strokeWidth: 3,
-	                 strokeOpacity: 1,
-	                 strokeColor: "#FF8C00",
-	                 strokeDashstyle: "dash"
-                     },
-                     "Polygon": {
-	                 strokeWidth: 2,
-	                 strokeColor: "#FF8C00",
-	                 fillColor: "#FF8C00"
-                     }
-                 }
-             })
-         ]);
+	//style per highlightLayer
+        var styleHighLightLayer = new OpenLayers.Style();
+        styleHighLightLayer.addRules([
+            new OpenLayers.Rule({
+                symbolizer: {
+                    "Point": {
+	                pointRadius: 4,
+	                graphicName: "circle",
+	                fillColor: "#FF8C00",
+	                fillOpacity: 0.3,
+	                strokeWidth: 1,
+	                strokeColor: "#FF8C00"
+                    },
+                    "Line": {
+	                strokeWidth: 3,
+	                strokeOpacity: 1,
+	                strokeColor: "#FF8C00",
+	                strokeDashstyle: "dash"
+                    },
+                    "Polygon": {
+	                strokeWidth: 2,
+	                strokeColor: "#FF8C00",
+	                fillColor: "#FF8C00"
+                    }
+                }
+            })
+        ]);
 
         var styleMapHighLightLayer = new OpenLayers.StyleMap({
             "default": styleHighLightLayer
         });
 
-	  //highlightlayer
+	//highlightlayer
         this.highlightLayer = new OpenLayers.Layer.Vector("attribHighLight", {
 	    isBaseLayer: false,
 	    visibility:true,
 	    displayInLayerSwitcher:false,
 	    styleMap: styleMapHighLightLayer});
 
-	//this.map.addLayer(this.highlightLayer);
 
         //overlays
         this.wms1= new OpenLayers.Layer.WMS(
@@ -148,8 +140,8 @@ Ext.define('PM.view.MapPanel', {
                 displayOutsideMaxExtent: true,
                 isBaseLayer: false,
                 yx : {'EPSG:4326' : true}
-            });	
-      this.vector = new OpenLayers.Layer.Vector("Elementi aggiunti");
+            });
+        this.vector = new OpenLayers.Layer.Vector("Elementi aggiunti");
 
 
 	this.wfs1 = new OpenLayers.Layer.Vector("Analisi anticipatoria", {
@@ -174,20 +166,11 @@ Ext.define('PM.view.MapPanel', {
 	    })
 	});
 
-
-        //this.map.addLayers([this.overlayers.vector, this.overlayers.wfs1]);
-       // this.map.addLayers([this.wfs1]);
-
-
-
-        //  that.map.addControl(new OpenLayers.Control.MousePosition());
-        // that.map.setCenter(new OpenLayers.LonLat('12.5', '41.88').transform(WGS84, sphericMercator),11);
-
         this.initActions();
 
         Ext.apply(that, {
             map: that.map,
-            layout:'fit', //per extjs 4.2.0...
+            layout:'fit',
             extent:that.maxExtent,
             dockedItems: [{
                 xtype: 'toolbar',
@@ -206,15 +189,8 @@ Ext.define('PM.view.MapPanel', {
                     {
                         plugins: ['gx_overlaylayercontainer'],
                         expanded: true,
-						text: 'Simboli'
-					}, /*{
-                        plugins: [{
-                            ptype: 'gx_layercontainer',
-                            store: that.layers,
-			    		text:'Simboli'
-                        }],
-                        expanded: true
-                    },*/ {
+			text: 'Simboli'
+		    },{
                         plugins: ['gx_baselayercontainer'],
                         expanded: true,
                         text: "Mappe di base"
@@ -226,12 +202,7 @@ Ext.define('PM.view.MapPanel', {
 	//treepanel
         this.tree = Ext.create('GeoExt.tree.Panel', {
             border: true,
-            //region: "west",
-            // title: "Layers",
             height: 250,
-            //split: true,
-            //collapsible: true,
-            // collapseMode: "mini",
             autoScroll: true,
 	    enableDD: true,
             store: this.store,
@@ -257,10 +228,10 @@ Ext.define('PM.view.MapPanel', {
         var layers=this.map.getLayersBy('isBaseLayer', false);
         for (var i=0; i<layers.length; i++)
 	{
-	  if (layers[i].name!=='attribHighLight')
-	  {
-	      this.map.removeLayer(layers[i]);
-	  }
+	    if (layers[i].name!=='attribHighLight')
+	    {
+	        this.map.removeLayer(layers[i]);
+	    }
 	}
     },
 
@@ -279,7 +250,6 @@ Ext.define('PM.view.MapPanel', {
 	    toggleKey: "ctrlKey",
 	    box: false
 	});
-	//this.selectControl.events.register("featureunhighlighted", this.selectControl, function(e){});
 
 	this.selectControl3=new OpenLayers.Control.SelectFeature(that.wfs3, {
 	    clickout: true, toggle: false,
@@ -287,45 +257,42 @@ Ext.define('PM.view.MapPanel', {
 	    toggleKey: "ctrlKey",
 	    box: false
 	});
-	
-	//this.selectControl3.events.register("featureunhighlighted", this.selectControl3, function(e){});
-	
-	 var featureInfoControl2= new OpenLayers.Control.WMSGetFeatureInfo({
-                url: 'http://89.31.77.165/geoserver/divater/wms',
-                layers: [this.wms1],
-		infoFormat:'application/json',
-                queryVisible: true,
-         });
 
-	 featureInfoControl2.events.register("getfeatureinfo", this, function(e){
-	            that.clearAllHighlight();
-		    var d = Ext.JSON.decode(e.text);
-                    if(d.features && d.features.length > 0)
-		    {
-		      that.createPolygon(d.features[0].geometry.coordinates);
-		    }
-	 });
+	var featureInfoControl2= new OpenLayers.Control.WMSGetFeatureInfo({
+            url: 'http://89.31.77.165/geoserver/divater/wms',
+            layers: [this.wms1],
+	    infoFormat:'application/json',
+            queryVisible: true
+        });
 
+	featureInfoControl2.events.register("getfeatureinfo", this, function(e){
+	    that.clearAllHighlight();
+	    var d = Ext.JSON.decode(e.text);
+            if(d.features && d.features.length > 0)
+	    {
+		that.createPolygon(d.features[0].geometry.coordinates);
+	    }
+	});
 	var featureInfoControl4= new OpenLayers.Control.WMSGetFeatureInfo({
-                url: 'http://89.31.77.165/geoserver/divater/wms',
-                layers: [this.wms1,this.wms3],
-		infoFormat:'application/json',
-                queryVisible: true,
-         });
+            url: 'http://89.31.77.165/geoserver/divater/wms',
+            layers: [this.wms1, this.wms3],
+	    infoFormat:'application/json',
+            queryVisible: true
+        });
 
 	featureInfoControl4.events.register("getfeatureinfo", this, function(e){
-	            that.clearAllHighlight();
-		    var d = Ext.JSON.decode(e.text);
-                    if(d.features && d.features.length > 0)
-		    {
-		      that.createPolygon(d.features[0].geometry.coordinates);
-		    }
-	}); 
+	    that.clearAllHighlight();
+	    var d = Ext.JSON.decode(e.text);
+            if(d.features && d.features.length > 0)
+	    {
+		that.createPolygon(d.features[0].geometry.coordinates);
+	    }
+	});
 
-	 this.map.addControl(this.selectControl);
-	 this.map.addControl(this.selectControl3);
-	this.map.addControl(featureInfoControl2);
+	this.map.addControl(this.selectControl);
+	this.map.addControl(this.selectControl3);
 	this.map.addControl(featureInfoControl4);
+	this.map.addControl(featureInfoControl2);
 
 	this.actionSelect1 = Ext.create('GeoExt.Action', {
 	    text: "<i class=\"fa fa-magic\"></i> seleziona",
@@ -333,29 +300,29 @@ Ext.define('PM.view.MapPanel', {
 	    map: that.map,
 	    toggleGroup: "draw",
 	    enableToggle: false,
-	   // group: "draw",
+	    // group: "draw",
 	    id:'btnSelect1',
 	    tooltip: "seleziona simbolo"
 	});
-	
+
 	this.actionSelect3 = Ext.create('GeoExt.Action', {
 	    text: "<i class=\"fa fa-magic\"></i> seleziona",
 	    control:  this.selectControl3,
 	    map: that.map,
 	    toggleGroup: "draw",
 	    enableToggle: false,
-	  //  group: "draw",
+	    //  group: "draw",
 	    id:'btnSelect3',
 	    tooltip: "seleziona simbolo"
-	});	
-	
+	});
+
 	this.actionGetfeatureInfo2 = Ext.create('GeoExt.Action', {
 	    text: "<i class=\"fa fa-magic\"></i> seleziona",
 	    control:  featureInfoControl2,
 	    map: that.map,
 	    toggleGroup: "draw",
 	    enableToggle: false,
-	  //  group: "draw",
+	    //  group: "draw",
 	    id:'btnGetFeatureInfo2',
 	    tooltip: "seleziona simbolo"
 	});
@@ -366,7 +333,7 @@ Ext.define('PM.view.MapPanel', {
 	    map: that.map,
 	    toggleGroup: "draw",
 	    enableToggle: false,
-	  //  group: "draw",
+	    //  group: "draw",
 	    id:'btnGetFeatureInfo4',
 	    tooltip: "seleziona simbolo"
 	});
@@ -386,7 +353,7 @@ Ext.define('PM.view.MapPanel', {
 	var actionMaxExtent = Ext.create('GeoExt.Action', {
 	    control: new OpenLayers.Control.ZoomToMaxExtent(),
 	    map: that.map,
-	    text: "<i class=\"fa  fa-arrows-alt \"></i>estendi",
+	    text: "<i class=\"fa  fa-arrows-alt \"></i> estendi",
 	    tooltip: "massima estensione di zoom"
 	});
 
@@ -398,27 +365,14 @@ Ext.define('PM.view.MapPanel', {
 	this.btnGetFeatureInfo2=Ext.create('Ext.button.Button', this.actionGetfeatureInfo2);
 	this.btnSelect3=Ext.create('Ext.button.Button', this.actionSelect3);
 	this.btnGetFeatureInfo4=Ext.create('Ext.button.Button', this.actionGetfeatureInfo4);
-	
+
 
 	var infoBtn=Ext.create('Ext.Button', {
 	    text: '<i class="fa fa-info"> </i> Modifica simbolo',
-	    renderTo: Ext.getBody(),
-	    handler: function() {
-		fs=false;
-		for (var f in selectedFeatures) fs=true;
-		if (fs) {
-		    if (Ext.getCmp("featInfo").collapsed) Ext.getCmp("featInfo").expand();
-		    else Ext.getCmp("featInfo").collapse();
-		}else alert('Nessun simbolo selezionata');
-	    }
+	    id: 'modifyFeatureButton',
+	    disabled: true
 	});
-	this.toolbarItems.push(infoBtn);
-	this.toolbarItems.push("-");
-	
-	this.toolbarItems.push(this.btnSelect1);
-	this.toolbarItems.push(this.btnGetFeatureInfo2); 
-	this.toolbarItems.push(this.btnSelect3);
-	this.toolbarItems.push(this.btnGetFeatureInfo4); 
+
 
 	//toolbarItems.push(Ext.create('Ext.button.Button', actionDelete));
 	this.toolbarItems.push("-");
@@ -481,7 +435,7 @@ Ext.define('PM.view.MapPanel', {
 	    id: 'drawMenu',
 	    menu: {
 	        xtype: 'menu',
-		
+	        plain: true,
 	        items: [
 	            Ext.create('Ext.button.Button', actionDrawPoint),
 	            Ext.create('Ext.button.Button', actionDrawLine),
@@ -489,7 +443,15 @@ Ext.define('PM.view.MapPanel', {
 	    }
 	};
 	this.toolbarItems.push(drawMenu);
-	
+
+	this.toolbarItems.push(infoBtn);
+	this.toolbarItems.push("-");
+
+	this.toolbarItems.push(this.btnSelect1);
+	this.toolbarItems.push(this.btnGetFeatureInfo2);
+	this.toolbarItems.push(this.btnSelect3);
+	this.toolbarItems.push(this.btnGetFeatureInfo4);
+
 
     },
 
@@ -498,15 +460,15 @@ Ext.define('PM.view.MapPanel', {
         this.highlightLayer.removeAllFeatures();
     },
 
-    
+
     removeHighlightLayer: function(){
         var layers=this.map.getLayersBy('isBaseLayer', false);
         for (var i=0; i<layers.length; i++)
 	{
-	  if (layers[i].name==='attribHighLight')
-	  {	      
-	      this.map.removeLayer(layers[i]);
-	  }
+	    if (layers[i].name==='attribHighLight')
+	    {
+	        this.map.removeLayer(layers[i]);
+	    }
 	}
     },
 
@@ -544,13 +506,12 @@ Ext.define('PM.view.MapPanel', {
         if(!this.sWin && typeof sWin==='undefined')
         {
 	    this.sWin = Ext.create('PM.view.FeatureWindow', {
-	        title: 'Salva',
+	        title: 'Informazioni del simbolo',
 	        feature: f
 	    });
         }
         this.sWin.show();
     },
-
 
 
     hideWindow: function(){

@@ -1,7 +1,7 @@
 Ext.Loader.setConfig({
-  enabled: true,
-  disableCaching: false,
-  paths: {
+    enabled: true,
+    disableCaching: false,
+    paths: {
         gxp: "src/gxp",
         GeoExt: "externals/geoext2/src/GeoExt",
         Ext: "http://cdn.sencha.com/ext/gpl/4.2.1/src"
@@ -12,27 +12,25 @@ Ext.application({
     name: 'PM',
 
     requires:[
-               'GeoExt.tree.View',
-               'GeoExt.tree.Column',               
-               'GeoExt.data.LayerStore',
-             //'GeoExt.tree.LayerTreeBuilder',
+        'PM.Config'
     ],
 
 
     controllers: [
-      'Main', 
-      'SaveFeature',
-      'GetCapabilities',
-      'Report',
-      'PanelFase1',
-      'PanelFase2',
-      'PanelFase3',
-      'PanelFase4',
-      'PanelFaseX',   
+        'Main',
+	'Map',
+        'SaveFeature',
+        'GetCapabilities',
+        'Report',
+        'PanelFase1',
+        'PanelFase2',
+        'PanelFase3',
+        'PanelFase4',
+       /* 'PanelFase5',
+        'PanelFase6',	
+	'PanelFase7',
+        'PanelFase8'*/
     ],
-    
-    //stores:['Layers'],
 
-    
     autoCreateViewport: true
 });

@@ -1079,8 +1079,8 @@ class UploadHandler
                 	$path="videos/".$_GET['fid'];
                 }
                 $path.="/".$file->name;
-                $db=new PDO('mysql:host=sql.geovolution.it;dbname=geovolut37572','geovolut37572','jack76');
-                $insertQuery="insert into phase1_img (name, path,fk_feature) values (?,?,?)";
+                $db=new PDO('mysql:host=localhost;dbname=ushahidi_v2','root','lynxbinario');
+                $insertQuery="insert into phase1_media (name, path,ph1_feature) values (?,?,?)";
                 $stmt=$db->prepare($insertQuery);
                 $stmt->bindParam(1, $file->name);
                 $stmt->bindParam(2, $path);

@@ -1,103 +1,109 @@
 Ext.define('PM.controller.GetCapabilities', {
 
     extend: 'Ext.app.Controller',
-    
+
     requires:[
-    'GeoExt.data.reader.WmsCapabilities',
-    'GeoExt.data.WmsCapabilitiesLayerStore'],
+        'GeoExt.data.reader.WmsCapabilities',
+        'GeoExt.data.WmsCapabilitiesLayerStore'],
 
     refs:[{
-      ref: 'mappanel',
-      selector:'mappanel'
+        ref: 'mappanel',
+        selector:'mappanel'
     },{
-      ref: 'panelfase3',
-      selector:'panelFase3'
+        ref: 'panelfase3',
+        selector:'panelFase3'
     },{
-      ref: 'urlField',
-      selector: 'getcapabilitieswindow textfield'
+        ref: 'urlField',
+        selector: 'getcapabilitieswindow textfield'
     },{
-      ref: 'grid',
-      selector: 'getcapabilitieswindow grid'
+        ref: 'grid',
+        selector: 'getcapabilitieswindow grid'
     }],
-    
-    
+
+
     views:['GetCapabilitiesWindow'],
-    
-    localUrl: 'wmsProxy.php?url='+encodeURIComponent("http://89.31.77.165//geoserver/ows?service=wms&request=GetCapabilities"),
-	   
-        init: function(){
-	  this.control({
+
+//    localUrl: PM.Config.getUrls().proxyHostWms+encodeURIComponent(PM.Config.getUrls().getCapabilities),
+//localUrl: PM.Config.getUrls().proxyHostWms+PM.Config.getUrls().getCapabilities,
+
+    init: function(){
+	this.control({
 	    'getcapabilitieswindow':{
-	      close: this.onCloseWindow
+	        close: this.onCloseWindow
 	    },
 	    'getcapabilitieswindow button[cls=urlBtn]':{
-	      click: this.onUrlBtnClick
+	        click: this.onUrlBtnClick
 	    },
 	    'getcapabilitieswindow button[cls=localBtn]':{
-	      click: this.onLocalBtnClick
+	        click: this.onLocalBtnClick
 	    },
 	    'getcapabilitieswindow grid':{
-	      itemdblclick: this.onGridItemDblClick
+	        itemdblclick: this.onGridItemDblClick
 	    }
         });
-    },
-    
-
-    
-    onCloseWindow: function(){
-      this.getPanelfase3().closeGetCapabiliesWindow();
-    },
-    
-    onUrlBtnClick: function(){
-      var textField=this.getUrlField();
-      if (!(textField.activeErrors && typeof textField.activeErrors!== 'undefined'))
-      {
-	var url=textField.getValue();
-	if (url!=='')
-	{
-	  this.loadGrid(url);
-	}
+	
+	if (PM.Config.getUrls().proxyHostWms && typeof PM.Config.getUrls().proxyHostWms!=='undefined')
+	  this.localUrl=PM.Config.getUrls().proxyHostWms+encodeURIComponent(PM.Config.getUrls().getCapabilities);
 	else
-	{
-	  alert('devi inserire una URL');
-	}
-      }
-      
+	  this.localUrl=PM.Config.getUrls().getCapabilities;
     },
-    
+
+
+
+    onCloseWindow: function(){
+        this.getPanelfase3().closeGetCapabiliesWindow();
+    },
+
+    onUrlBtnClick: function(){
+        var textField=this.getUrlField();
+        if (!(textField.activeErrors && typeof textField.activeErrors!== 'undefined'))
+        {
+	    var url=textField.getValue();
+	    if (url!=='')
+	    {
+	        this.loadGrid(url);
+	    }
+	    else
+	    {
+	        alert('devi inserire una URL');
+	    }
+        }
+
+    },
+
     onLocalBtnClick: function(){
-       this.loadGrid(this.localUrl);
+        this.loadGrid(this.localUrl);
     },
-    
+
     loadGrid: function(url){
-      var that=this;
-       var store=Ext.create('GeoExt.data.WmsCapabilitiesStore', {
+        var that=this;
+        var store=Ext.create('GeoExt.data.WmsCapabilitiesStore', {
             storeId: 'wmscapsStore',
             url: url,
             autoLoad: true
         });
-       
-       
-     store.load({
-       callback: function(records, operation, success) {
-	 for (var i=0; i<records.length; i++)
-	 {
-	   records[i].raw.isloadedByGetCapabilities=true;
-	 }
-	 that.getGrid().getStore().loadRecords(store.getRange());
-       },
-    });     
+
+
+        store.load({
+            callback: function(records, operation, success) {
+	        for (var i=0; i<records.length; i++)
+	        {
+	            records[i].raw.isloadedByGetCapabilities=true;
+	        }
+	        that.getGrid().getStore().loadRecords(store.getRange());
+            }
+        });
     },
-    
-    
+
+
     onGridItemDblClick: function(grid, record){
-      var mappanel=this.getMappanel();
-      mappanel.map.removeLayer(mappanel.wfs3);
-      mappanel.map.addLayer(record.getLayer().clone());  
-      mappanel.map.addLayer(mappanel.wfs3);
-      this.getGrid().getStore().remove(record);
+        var mappanel=this.getMappanel();
+        mappanel.map.removeLayer(mappanel.wfs3);
+        mappanel.map.addLayer(record.getLayer().clone());
+        mappanel.map.addLayer(mappanel.wfs3);
+        this.getGrid().getStore().remove(record);
     }
-    
-    
+
+
 
 });

@@ -3,28 +3,19 @@ Ext.define('PM.view.PanelFase3', {
     alias : 'widget.panelFase3',
 
     title: 'Fase 3',
-    //   bodyPadding: 5,
-    //   autoScroll: true,
+    autoScroll: true,
+    
     layout: {
         type: 'vbox',
         align : 'stretch'
     },
-    
+
     items:[{
-           xtype: 'container',
-            cls: 'tree'
-        }],
-	/*
-    layerTreeBar: [{
-                xtype: 'toolbar',
-                dock: 'top',
-                items: [{
-                text: "remove"
-            }, {
-                text: "add"
-            }]
-    }]*/
-	
+        xtype: 'container',
+        cls: 'tree',
+        margin: 5
+    }],
+
     openGetCapabiliesWindow: function(f){
         if(!this.sWin && typeof sWin==='undefined')
         {
@@ -42,6 +33,5 @@ Ext.define('PM.view.PanelFase3', {
 	    this.sWin.destroy();
 	    this.sWin=null;
 	}
-
     }
 });

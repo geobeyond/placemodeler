@@ -2,68 +2,58 @@ Ext.define('PM.view.FeatureWindow', {
 
     alias: 'widget.featurewindow',
     extend: 'Ext.window.Window',
+
+    requires:['PM.view.FeaturePanel'],
+
     border:false,
 
     layout: 'fit',
-    height: 400,
-    width: 600,
-    padding: 15,
+
+    padding:5,
 
     feature: null,
 
     items:[{
         xtype: 'form',
         autoScroll: true,
-        items:[
-	    {
-		xtype:'textfield',
-		id: 'name',
-		name: 'name',
-		fieldLabel: 'Name'
-	    },{
-		xtype:'textfield',
-		id: 'description',
-		name: 'description',
-		fieldLabel: 'Descrizione'
-	    }
-	    ,{
-		xtype:'textfield',
-		id: 'text',
-		name: 'text',
-		fieldLabel: 'Testo'
-	    }
-	    ,{
-		xtype:'textfield',
-		id: 'maplabel',
-		name: 'maplabel',
-		fieldLabel: 'Label'
-	    },{
-		xtype:'textfield',
-		id: 'style',
-		name: 'style',
-		fieldLabel: 'style'
-	    },{
-		xtype:'textfield',
-		id: 'symbol_size',
-		name: 'symbol_size',
-		fieldLabel: 'Symbol Size'
-	    },{
-		xtype:'textfield',
-		id: 'title',
-		name: 'title',
-		fieldLabel: 'Title'
-	    },{
-		xtype:'textfield',
-		id: 'link',
-		name: 'link',
-		fieldLabel: 'Link'
-	    }
-        ]
+
+        items:[{
+	    xtype: 'featurepanel',
+            layout: 'fit'
+	},{
+            xtype: 'fieldset',
+            title: 'Media',
+            items:[{
+                xtype:'button',
+                id:'addMedia',
+                text: 'aggiungi foto e video',
+                margin: '10 0 15 5'
+            }]
+        }]
+    }],
+    buttonAlign: 'left',
+    buttons:[{
+        text: 'Salva'
+    },{
+        text: 'Anulla'
     }],
 
-    buttons:[{
-        text: 'Annulla'
-    },{
-        text: 'Salva'
-    }]
+
+    openMediaWindow: function(){
+        Ext.create('Ext.window.Window',{
+	    title : "Upload images/video",
+            id: 'mediaWindow',
+	    width : 500,
+	    height: 300,
+	    layout : 'fit',
+            //  modal: true,
+	    items : [{
+		xtype : "component",
+		autoEl : {
+		    tag : "iframe",
+		    src : "fileUpload.php?fid=prova.20"//+feature.fid
+		}
+	    }]
+        }).show();
+    }
 });

@@ -1,6 +1,6 @@
 Ext.define('PM.view.PanelFase2', {
     extend: 'Ext.panel.Panel',
-    alias : 'widget.panelFase2',
+    alias : 'widget.panelFase2',   
 
     layout: {
         type: 'vbox',
@@ -8,39 +8,33 @@ Ext.define('PM.view.PanelFase2', {
     },
 
     title: 'Fase 2',
-    //   bodyPadding: 5,
-    //   autoScroll: true,
+    autoScroll: true,
+    
     items:[
         {
-           xtype: 'container',      
-	   cls:'tree'
+            xtype: 'container',
+	    cls:'tree',
+            margin: 5
         },
 	{
-	  xtype: 'radiogroup',
-	  margin: '20 2 2 2' ,
-	  columns: 1,
-          vertical: true	   
+	    xtype: 'radiogroup',
+	    margin: '20 2 2 2' ,
+	    columns: 1,
+            vertical: true
 	},
 	{
-	   xtype:'button',
+	    xtype:'button',
 	    text: '<i class="fa fa-comment"></i> Crea Report',
 	    tooltip: "Invia gli elementi selezionati",
-            margin: '20 5 5 10' ,
+            margin: '20 5 5 5' ,
             disabled: true,
-            enableToggle: true,
+            enableToggle: true
 	}
     ],
-    
-     openReportWindow: function(title){
-        if(!this.sWin && typeof sWin==='undefined')
-        {
-	    this.sWin = Ext.create('PM.view.ReportWindow', {
-	        title: title,
-		id: 'reportFase1',
-	        feature: f, //???
-		
-	    });
-        }
-        this.sWin.show();
+
+    openReportWindow: function(){
+        Ext.create('PM.view.ReportWindow', {
+	    id: 'reportFase2'
+	}).show();
     },
 });

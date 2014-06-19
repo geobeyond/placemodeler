@@ -3,14 +3,15 @@
 $fid=$_GET['fid'];
 if ($_POST['fid']!='') $fid=$_POST['fid'];
 
-$db=new PDO('mysql:host=sql.geovolution.it;dbname=geovolut37572','geovolut37572','jack76');
+//$db=new PDO('mysql:host=sql.geovolution.it;dbname=geovolut37572','geovolut37572','jack76');
+$db=new PDO('mysql:host=localhost;dbname=ushahidi_v2','root','lynxbinario');
 
-$result = $db->query("SELECT idphase1_img, name, path FROM phase1_img where fk_feature='{$fid}'");
+$result = $db->query("SELECT idphase1_media, name, path FROM phase1_media where ph1_feature='{$fid}'");
 $noResult=true;
 foreach($result as $row) {
 	$noResult=false;
 	$media="";
-	$media['id']=$row['idphase1_img'];
+	$media['id']=$row['idphase1_media'];
 	$media['name']=$row['name'];
 	$media['path']=$row['path'];
 	if (preg_match("!^images!", $row['path'])){
