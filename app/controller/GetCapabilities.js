@@ -23,8 +23,7 @@ Ext.define('PM.controller.GetCapabilities', {
 
     views:['GetCapabilitiesWindow'],
 
-//    localUrl: PM.Config.getUrls().proxyHostWms+encodeURIComponent(PM.Config.getUrls().getCapabilities),
-//localUrl: PM.Config.getUrls().proxyHostWms+PM.Config.getUrls().getCapabilities,
+    localUrl: PM.Config.getUrls().proxyHostWms+encodeURIComponent(PM.Config.getUrls().getCapabilities),
 
     init: function(){
 	this.control({
@@ -41,7 +40,7 @@ Ext.define('PM.controller.GetCapabilities', {
 	        itemdblclick: this.onGridItemDblClick
 	    }
         });
-	
+
 	if (PM.Config.getUrls().proxyHostWms && typeof PM.Config.getUrls().proxyHostWms!=='undefined')
 	  this.localUrl=PM.Config.getUrls().proxyHostWms+encodeURIComponent(PM.Config.getUrls().getCapabilities);
 	else
@@ -65,7 +64,12 @@ Ext.define('PM.controller.GetCapabilities', {
 	    }
 	    else
 	    {
-	        alert('devi inserire una URL');
+                Ext.Msg.alert({
+                    title:'Errore!',
+                    msg: 'devi inserire un Url.',
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.Msg.ERROR
+                });
 	    }
         }
 

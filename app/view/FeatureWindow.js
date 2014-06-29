@@ -35,7 +35,7 @@ Ext.define('PM.view.FeatureWindow', {
     buttons:[{
         text: 'Salva'
     },{
-        text: 'Anulla'
+        text: 'Annulla'
     }],
 
 

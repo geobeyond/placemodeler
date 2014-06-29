@@ -26,10 +26,10 @@ Ext.application({
         'PanelFase2',
         'PanelFase3',
         'PanelFase4',
-       /* 'PanelFase5',
+        'PanelFase5',
         'PanelFase6',	
 	'PanelFase7',
-        'PanelFase8'*/
+        'PanelFase8'
     ],
 
     autoCreateViewport: true

@@ -34,38 +34,19 @@ Ext.define('PM.controller.PanelFase2', {
                 click: this.onBtnClick
             },
 	    'reportwindow[id=reportFase2]': {
-	        show: this.onShowWindow
+	        show: this.onShowWindow,
+                close: this.onCloseWindow
 	    }
         });
     },
 
-    onAfterRenderRadioGroupFase2: function(){
-        var that=this;
-        PM.app.getController('Report').getUshahidiApi('customforms', 'all', '', function(err, res){
-	    if (err.code!=='0')
-	    {
-	        Ext.Msg.alert({
-                    title:'Errore!',
-                    msg: err.message,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.Msg.ERROR
-                });
-	    }
-	    else
-	    {
-	        var radiogroup=that.getRadiogroupFase2();
-	        for (var i=0; i < res.customforms.length; i++)
-	        {
-		    var elem={
-		        boxLabel: res.customforms[i].title,
-		        name: 'radioFase2',
-		        inputValue: res.customforms[i].id
-		    };
-	            radiogroup.add(elem);
+    disableComponents: function(v){
+        this.getButton().setDisabled(v);
+        this.getRadiogroupFase2().setDisabled(v);
+    },
 
-	        }
-	    }
-        });
+    onAfterRenderRadioGroupFase2: function(){
+	PM.app.getController('Report').customReport('customforms', 'all', '',null,null);
     },
 
     onRadioChange: function(o, v){
@@ -79,10 +60,8 @@ Ext.define('PM.controller.PanelFase2', {
 
 
     onShowWindow: function(window){
-	var that=this;
-	var windowForm=that.getWindowForm2();
         var radiogroup=this.getRadiogroupFase2();
-        var value=radiogroup.getValue().radioFase2;
+        var formId=radiogroup.getValue().radioFase2;
         var title='';
         for (var i=0; i < radiogroup.items.items.length; i++)
         {
@@ -91,110 +70,14 @@ Ext.define('PM.controller.PanelFase2', {
 	        title=radiogroup.items.items[i].boxLabel;
 	    }
         }
-
         window.setTitle(title);
+        var fid=this.getMappanel().selectedFeature.fid;
+        PM.app.getController('Report').customReport('customforms', 'meta', formId, fid, this.getWindowForm2());
 
-	var reportController=PM.app.getController('Report');
-	reportController.getUshahidiApi('customforms', 'meta', value, function(err, res){
-	    if (err.code!=='0')
-	    {
-                Ext.Msg.alert({
-                    title:'Errore!',
-                    msg: err.message,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.Msg.ERROR
-                });
-	    }
-	    else
-	    {
-                var selectedFeature=that.getMappanel().selectedFeature;
-                var fid='';
-                if (selectedFeature && typeof selectedFeature!=='undefined')
-                    fid=selectedFeature.fid;
-
-                var questionItems=[], htmlEditor;
-	        for (var i=0; i<res.customforms.fields.length; i++)
-	        {
-                    var field=res.customforms.fields[i];
-                    switch(field.type)
-                    {
-                    case '1':
-                        if (field.name==='layer_fk')
-                        {
-                            windowForm.add({
-                                xtype: 'hiddenfield',
-                                value: fid
-                            });
-                        }
-                        else
-                        {
-                            questionItems.push({
-                                xtype: 'textfield',
-                                name: field.name,
-                                labelWidth:70,
-                                width: 180,
-                                labelAlign:'left',
-                                fieldLabel: field.name
-                            });
-                        }
-                        break;
-                    case '2':
-                        htmlEditor={
-                            xtype: 'htmleditor',
-                            fieldLabel: field.name,
-                            width: 676,
-                            colspan:2,
-                            name: field.name
-                        };
-                        break;
-                    case '7':
-                        var labelWidth=220;
-                        var width=320;
-                        if (value===3)
-                        {
-                            labelWidth=70;
-                            width=180;
-                        }
-                        questionItems.push({xtype: 'combobox',
-			                    width: width,
-			                    fieldLabel:field.name,
-                                            labelWidth: labelWidth,
-			                    store: that.parseFields(field.default)[0],
-			                    value: that.parseFields(field.default)[1]
-			                   });
-                        break;
-                    default:
-                        break;
-                    }
-                }
-
-                if (typeof htmlEditor!=='undefined')
-                {
-                    windowForm.add(htmlEditor);
-                }
-
-                if (questionItems.length > 0)
-                {
-                    windowForm.add({
-                        xtype: 'container',
-                        margin: '10 0 0 0',
-                        layout: {
-                            type: 'vbox'
-                        },
-                        items: questionItems
-                    });
-                }
-            }
-	});
+        this.disableComponents(true);
     },
 
-    parseFields: function (str){
-	var val,valori=[];
-	val=str.split('::');
-	var valPredefinito=val[1];
-	valori=val[0].split(',');
-	return [valori,valPredefinito];
+    onCloseWindow:function(){
+        this.disableComponents(false);
     }
-
-
 });

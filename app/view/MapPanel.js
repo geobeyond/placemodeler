@@ -16,7 +16,9 @@ Ext.define('PM.view.MapPanel', {
     border: 'false',
     layout: 'fit',
 
-    saveStrategy: new OpenLayers.Strategy.Save(),
+    saveStrategy1: new OpenLayers.Strategy.Save(),
+    saveStrategy3: new OpenLayers.Strategy.Save(),
+    saveStrategy8: new OpenLayers.Strategy.Save(),
 
     maxExtent: new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508.34),
 
@@ -26,7 +28,7 @@ Ext.define('PM.view.MapPanel', {
         units: "m",
         minZoomLevel: 1,
         maxZoomLevel: 22,
-        controls: [new OpenLayers.Control.Navigation()],//, Gis.transformFeature],
+        controls: [new OpenLayers.Control.Navigation(), new OpenLayers.Control.Zoom()],
         maxExtent: this.maxExtent
 
     }),
@@ -41,6 +43,8 @@ Ext.define('PM.view.MapPanel', {
 
 	     new OpenLayers.Layer.Google("Google Hybrid", {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20, isBaseLayer: true}),
 	     new OpenLayers.Layer.Google("Google Satellite", {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22, isBaseLayer: true})],
+
+   featureWindowOpen: false,
 
 
 
@@ -110,7 +114,7 @@ Ext.define('PM.view.MapPanel', {
 
         //overlays
         this.wms1= new OpenLayers.Layer.WMS(
-            "Analisi anticipatoria", "http://89.31.77.165/geoserver/divater/wms",
+            "Analisi anticipatoria", PM.Config.getUrls().serverWms,
             {
                 LAYERS: 'divater:pm_phase1',
                 STYLES: '',
@@ -126,7 +130,7 @@ Ext.define('PM.view.MapPanel', {
                 yx : {'EPSG:4326' : true}
             });
         this.wms3= new OpenLayers.Layer.WMS(
-            "Analisi tradizionale", "http://89.31.77.165/geoserver/divater/wms",
+            "Analisi tradizionale", PM.Config.getUrls().serverWms,
             {
                 LAYERS: 'divater:pm_phase3',
                 STYLES: '',
@@ -145,24 +149,41 @@ Ext.define('PM.view.MapPanel', {
 
 
 	this.wfs1 = new OpenLayers.Layer.Vector("Analisi anticipatoria", {
-	    strategies: [new OpenLayers.Strategy.BBOX(), this.saveStrategy],
+	    strategies: [new OpenLayers.Strategy.BBOX(), this.saveStrategy1],
 	    //styleMap: sm,
 	    projection: new OpenLayers.Projection("EPSG:4326"),
 	    protocol: new OpenLayers.Protocol.WFS({
-	        url: "http://89.31.77.165/geoserver/wfs",
+	        url: PM.Config.getUrls().serverWfs,
 	        featureNS :  "http://89.31.77.165/",
-	        featureType: "pm_phase1"
+	        featureType: "pm_phase1",
+                version: "1.1.0",
+    //            schema: PM.Config.getUrls().describeWfs+'divater:pm_phase1'
 	    })
 	});
 
 	this.wfs3 = new OpenLayers.Layer.Vector("Analisi tradizionale", {
-	    strategies: [new OpenLayers.Strategy.BBOX(), this.saveStrategy],
+	    strategies: [new OpenLayers.Strategy.BBOX(), this.saveStrategy3],
 	    //styleMap: sm,
 	    projection: new OpenLayers.Projection("EPSG:4326"),
 	    protocol: new OpenLayers.Protocol.WFS({
-	        url: "http://89.31.77.165/geoserver/wfs",
+	        url: PM.Config.getUrls().serverWfs,
 	        featureNS :  "http://89.31.77.165/",
-	        featureType: "pm_phase3"
+	        featureType: "pm_phase3",
+                version: "1.1.0",
+//                schema: PM.Config.getUrls().describeWfs+'divater:pm_phase3'
+	    })
+	});
+
+	this.wfs8 = new OpenLayers.Layer.Vector("Analisi fase 8", {
+	    strategies: [new OpenLayers.Strategy.BBOX(), this.saveStrategy8],
+	    //styleMap: sm,
+	    projection: new OpenLayers.Projection("EPSG:4326"),
+	    protocol: new OpenLayers.Protocol.WFS({
+	        url: PM.Config.getUrls().serverWfs,
+	        featureNS :  "http://89.31.77.165/",
+	        featureType: "pm_phase3", //pm_phase8
+                version: "1.1.0",
+  //              schema: PM.Config.getUrls().describeWfs+'divater:pm_phase8'
 	    })
 	});
 
@@ -202,7 +223,7 @@ Ext.define('PM.view.MapPanel', {
 	//treepanel
         this.tree = Ext.create('GeoExt.tree.Panel', {
             border: true,
-            height: 250,
+            maxHeight: 280,
             autoScroll: true,
 	    enableDD: true,
             store: this.store,
@@ -228,10 +249,10 @@ Ext.define('PM.view.MapPanel', {
         var layers=this.map.getLayersBy('isBaseLayer', false);
         for (var i=0; i<layers.length; i++)
 	{
-	    if (layers[i].name!=='attribHighLight')
-	    {
+	  //  if (layers[i].name!=='attribHighLight')
+	  //  {
 	        this.map.removeLayer(layers[i]);
-	    }
+	  //  }
 	}
     },
 
@@ -258,41 +279,35 @@ Ext.define('PM.view.MapPanel', {
 	    box: false
 	});
 
-	var featureInfoControl2= new OpenLayers.Control.WMSGetFeatureInfo({
-            url: 'http://89.31.77.165/geoserver/divater/wms',
+	this.selectControl8=new OpenLayers.Control.SelectFeature(that.wfs8, {
+	    clickout: true, toggle: false,
+	    multiple: false, hover: false,
+	    toggleKey: "ctrlKey",
+	    box: false
+	});
+
+        this.featureInfoControl2= new OpenLayers.Control.WMSGetFeatureInfo({
+            url: PM.Config.getUrls().serverWms,
             layers: [this.wms1],
 	    infoFormat:'application/json',
             queryVisible: true
         });
 
-	featureInfoControl2.events.register("getfeatureinfo", this, function(e){
-	    that.clearAllHighlight();
-	    var d = Ext.JSON.decode(e.text);
-            if(d.features && d.features.length > 0)
-	    {
-		that.createPolygon(d.features[0].geometry.coordinates);
-	    }
-	});
-	var featureInfoControl4= new OpenLayers.Control.WMSGetFeatureInfo({
-            url: 'http://89.31.77.165/geoserver/divater/wms',
+
+	this.featureInfoControl4= new OpenLayers.Control.WMSGetFeatureInfo({
+            url: PM.Config.getUrls().serverWms,
             layers: [this.wms1, this.wms3],
 	    infoFormat:'application/json',
             queryVisible: true
         });
 
-	featureInfoControl4.events.register("getfeatureinfo", this, function(e){
-	    that.clearAllHighlight();
-	    var d = Ext.JSON.decode(e.text);
-            if(d.features && d.features.length > 0)
-	    {
-		that.createPolygon(d.features[0].geometry.coordinates);
-	    }
-	});
 
 	this.map.addControl(this.selectControl);
 	this.map.addControl(this.selectControl3);
-	this.map.addControl(featureInfoControl4);
-	this.map.addControl(featureInfoControl2);
+	this.map.addControl(this.selectControl8);
+	this.map.addControl(this.featureInfoControl4);
+	this.map.addControl(this.featureInfoControl2);
+
 
 	this.actionSelect1 = Ext.create('GeoExt.Action', {
 	    text: "<i class=\"fa fa-magic\"></i> seleziona",
@@ -316,9 +331,20 @@ Ext.define('PM.view.MapPanel', {
 	    tooltip: "seleziona simbolo"
 	});
 
+	this.actionSelect8 = Ext.create('GeoExt.Action', {
+	    text: "<i class=\"fa fa-magic\"></i> seleziona",
+	    control:  this.selectControl8,
+	    map: that.map,
+	    toggleGroup: "draw",
+	    enableToggle: false,
+	    //  group: "draw",
+	    id:'btnSelect8',
+	    tooltip: "seleziona simbolo"
+	});
+
 	this.actionGetfeatureInfo2 = Ext.create('GeoExt.Action', {
 	    text: "<i class=\"fa fa-magic\"></i> seleziona",
-	    control:  featureInfoControl2,
+	    control:  that.featureInfoControl2,
 	    map: that.map,
 	    toggleGroup: "draw",
 	    enableToggle: false,
@@ -329,7 +355,7 @@ Ext.define('PM.view.MapPanel', {
 
 	this.actionGetfeatureInfo4 = Ext.create('GeoExt.Action', {
 	    text: "<i class=\"fa fa-magic\"></i> seleziona",
-	    control:  featureInfoControl4,
+	    control:  that.featureInfoControl4,
 	    map: that.map,
 	    toggleGroup: "draw",
 	    enableToggle: false,
@@ -364,6 +390,7 @@ Ext.define('PM.view.MapPanel', {
 	this.btnSelect1=Ext.create('Ext.button.Button', this.actionSelect1);
 	this.btnGetFeatureInfo2=Ext.create('Ext.button.Button', this.actionGetfeatureInfo2);
 	this.btnSelect3=Ext.create('Ext.button.Button', this.actionSelect3);
+	this.btnSelect8=Ext.create('Ext.button.Button', this.actionSelect8);
 	this.btnGetFeatureInfo4=Ext.create('Ext.button.Button', this.actionGetfeatureInfo4);
 
 
@@ -450,6 +477,7 @@ Ext.define('PM.view.MapPanel', {
 	this.toolbarItems.push(this.btnSelect1);
 	this.toolbarItems.push(this.btnGetFeatureInfo2);
 	this.toolbarItems.push(this.btnSelect3);
+	this.toolbarItems.push(this.btnSelect8);
 	this.toolbarItems.push(this.btnGetFeatureInfo4);
 
 
@@ -461,7 +489,7 @@ Ext.define('PM.view.MapPanel', {
     },
 
 
-    removeHighlightLayer: function(){
+    /*removeHighlightLayer: function(){
         var layers=this.map.getLayersBy('isBaseLayer', false);
         for (var i=0; i<layers.length; i++)
 	{
@@ -470,59 +498,71 @@ Ext.define('PM.view.MapPanel', {
 	        this.map.removeLayer(layers[i]);
 	    }
 	}
-    },
+    },*/
 
-    createPolygon: function(coord){ //crea poligono e aggiunge in highlightLayer....
-        var points=[];
-        for (var i=0; i<coord[0].length;i++) //outer ring (unico)
+    createHighlightFeature: function(geometry){ //crea poligono e aggiunge in highlightLayer....
+
+        var coord=geometry.coordinates;
+        var type=geometry.type;
+        var feature;
+        if (type==='Point')
         {
-	    var point=new OpenLayers.Geometry.Point(coord[0][i][0], coord[0][i][1]);
+            var point=new OpenLayers.Geometry.Point(coord[0], coord[1]);
 	    point=point.transform(this.WGS84, this.sphericMercator);
-	    points.push(point);
+            feature = new OpenLayers.Feature.Vector(point);
         }
-        var outerRing=new OpenLayers.Geometry.LinearRing(points);
+        else if (type==='LineString')
+        {
+            var points=[];
+            for (var i=0; i<coord.length; i++)
+            {
+                var point=new OpenLayers.Geometry.Point(coord[i][0], coord[i][1]);
+                point=point.transform(this.WGS84, this.sphericMercator);
+                points.push(point);
+            }
+            feature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(points));
+        }
+        else if (type==='Polygon')
+        {
+            var points=[];
+            for (var i=0; i<coord[0].length;i++) //outer ring (unico)
+            {
+	        var point=new OpenLayers.Geometry.Point(coord[0][i][0], coord[0][i][1]);
+	        point=point.transform(this.WGS84, this.sphericMercator);
+	        points.push(point);
+            }
+            var outerRing=new OpenLayers.Geometry.LinearRing(points);
 
-        var rings=[];
-        rings.push(outerRing);
+            var rings=[];
+            rings.push(outerRing);
 
-        for (var z=1;z<coord.length;z++)//gli altri sono gli inner rings...
-	{
-	    var points1=[];
-	    for (var y=0;y<coord[z].length;y++)
+            for (var z=1;z<coord.length;z++)//gli altri sono gli inner rings...
 	    {
-	        var point=new OpenLayers.Geometry.Point(coord[z][y][0], coord[z][y][1]);
-		point=point.transform(this.WGS84, this.sphericMercator);
-	        points1.push(point);
+	        var points1=[];
+	        for (var y=0;y<coord[z].length;y++)
+	        {
+	            var point=new OpenLayers.Geometry.Point(coord[z][y][0], coord[z][y][1]);
+		    point=point.transform(this.WGS84, this.sphericMercator);
+	            points1.push(point);
+	        }
+	        var innerRing=new OpenLayers.Geometry.LinearRing(points1);
+	        rings.push(innerRing);
 	    }
-	    var innerRing=new OpenLayers.Geometry.LinearRing(points1);
-	    rings.push(innerRing);
-	}
-	var polygonFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon(rings));
-	this.highlightLayer.addFeatures([polygonFeature]);
+            feature=new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon(rings));
+        }
+	this.highlightLayer.addFeatures([feature]);
+        this.selectedFeature=feature;
     },
 
 
     saveFeature: function(f){
-        if(!this.sWin && typeof sWin==='undefined')
+        if (!this.featureWindowOpen)
         {
-	    this.sWin = Ext.create('PM.view.FeatureWindow', {
+	    Ext.create('PM.view.FeatureWindow', {
 	        title: 'Informazioni del simbolo',
 	        feature: f
-	    });
+	    }).show();
+            this.featureWindowOpen = true;
         }
-        this.sWin.show();
-    },
-
-
-    hideWindow: function(){
-        if (this.sWin && typeof this.sWin==='object')
-	{
-	    this.sWin.destroy();
-	    this.sWin=null;
-	}
-
     }
-
-
-
 });

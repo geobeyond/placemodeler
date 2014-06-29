@@ -36,8 +36,10 @@ Ext.define('PM.view.GetCapabilitiesWindow', {
         },{
 	    xtype: 'textfield',
 	    name: 'url',
+            fieldLabel: 'Url',
 	    vtype:'url',
-	    width: 270
+	    width: 270,
+            labelWidth:20
         },{
 	    colspan:2,
 	    xtype: 'grid',

@@ -31,42 +31,19 @@ Ext.define('PM.controller.PanelFase1', {
 
     onBtnClick: function(){
         this.getPanelfase1().openReportWindow();
-        this.disableButton(true);
+        this.disableComponents(true);
     },
 
     onCloseWindow: function(){
-        this.disableButton(false);
+        this.disableComponents(false);
     },
 
     onShowWindow: function(){
-	var that=this;
-	var reportController=PM.app.getController('Report');
-	reportController.getUshahidiApi('customforms', 'meta', '1', function(err, res){
-	    if (err.code!=='0')
-	    {
-                Ext.Msg.alert({
-                    title:'Errore!',
-                    msg: err.message,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.Msg.ERROR
-                });
-	    }
-	    else
-	    {
-	        var field=res.customforms.fields[0];
-	        var elem={
-	            xtype: 'hiddenfield',
-	            id: field.id,
-	            name:'custom_field['+field.id+']',
-	            cls:'fk',
-	            value: that.getMappanel().selectedFeature.fid
-	        };
-	        that.getWindowForm().add(elem);
-	    }
-	});
+        var fid=this.getMappanel().selectedFeature.fid;
+	PM.app.getController('Report').customReport('customforms', 'meta', 1, fid, this.getWindowForm());
     },
 
-    disableButton: function(value){
+    disableComponents: function(value){
         this.getButton().setDisabled(value);
     }
 });

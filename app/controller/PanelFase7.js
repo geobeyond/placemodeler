@@ -1,30 +1,30 @@
-Ext.define('PM.controller.PanelFase4', {
+Ext.define('PM.controller.PanelFase7', {
 
     extend: 'Ext.app.Controller',
 
 
-    views:['PanelFase4'],
+    views:['PanelFase7'],
 
     refs:[{
         ref: 'mappanel',
         selector: 'mappanel'
     },{
-        ref: 'panelFase4',
-        selector: 'panelFase4'
+        ref: 'panelFase7',
+        selector: 'panelFase7'
     },{
     	ref: 'button',
-        selector: 'panelFase4 > button'
+        selector: 'panelFase7 > button'
     },{
-        ref: 'windowForm4',
-        selector: 'reportwindow[id=reportFase4] > form > fieldset'
+        ref: 'windowForm7',
+        selector: 'reportwindow[id=reportFase7] > form > fieldset'
     }],
 
     init: function(){
         this.control({
-            'panelFase4 > button':{
+            'panelFase7 > button':{
                 click: this.onButtonClick
             },
-            'reportwindow[id=reportFase4]': {
+            'reportwindow[id=reportFase7]': {
 	        show: this.onShowWindow,
                 close: this.onCloseWindow
 	    }
@@ -32,7 +32,7 @@ Ext.define('PM.controller.PanelFase4', {
     },
 
     onButtonClick: function(){
-        this.getPanelFase4().openReportWindow();
+        this.getPanelFase7().openReportWindow();
         this.disableComponents(true);
     },
 
@@ -41,9 +41,9 @@ Ext.define('PM.controller.PanelFase4', {
     },
 
     onShowWindow: function(window){
-        window.setTitle('Questionario 4');
+        window.setTitle('Questionario 7');
         var fid=this.getMappanel().selectedFeature.fid;
-        PM.app.getController('Report').customReport('customforms', 'meta', 5, fid, this.getWindowForm4());
+        PM.app.getController('Report').customReport('customforms', 'meta', 6, fid, this.getWindowForm7());
 
     },
 

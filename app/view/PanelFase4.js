@@ -4,7 +4,7 @@ Ext.define('PM.view.PanelFase4', {
 
     title: 'Fase 4',
     autoScroll: true,
-    
+
     layout: {
         type: 'vbox',
         align : 'stretch'
@@ -18,13 +18,14 @@ Ext.define('PM.view.PanelFase4', {
 	xtype:'button',
 	text: '<i class="fa fa-comment"></i> Invia il questionario',
 	tooltip: "Invia per il simbolo selezionato",
-	handler: function() {
-	    if (getSelectedFeaturesCount()==0) {
-		alert("Nessun elemento selezionato!");
-	    }
-	    else {
-		showSelectedForm(2);
-	    }
-	}
-    }]
+        margin: '20 5 5 5',
+        disabled: true
+    }],
+
+    openReportWindow: function(){
+        Ext.create('PM.view.ReportWindow', {
+	   // title: 'Standard Report',
+	    id: 'reportFase4'
+	}).show();
+    }
 });

@@ -8,8 +8,9 @@ Ext.define('PM.controller.PanelFase3', {
     init: function(){
         this.control({
         });
+    },
+
+    disableComponents: function(){
     }
-
-
 
 });

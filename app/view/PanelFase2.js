@@ -1,6 +1,6 @@
 Ext.define('PM.view.PanelFase2', {
     extend: 'Ext.panel.Panel',
-    alias : 'widget.panelFase2',   
+    alias : 'widget.panelFase2',
 
     layout: {
         type: 'vbox',
@@ -9,7 +9,7 @@ Ext.define('PM.view.PanelFase2', {
 
     title: 'Fase 2',
     autoScroll: true,
-    
+
     items:[
         {
             xtype: 'container',
@@ -20,7 +20,8 @@ Ext.define('PM.view.PanelFase2', {
 	    xtype: 'radiogroup',
 	    margin: '20 2 2 2' ,
 	    columns: 1,
-            vertical: true
+            vertical: true,
+            disabled: true
 	},
 	{
 	    xtype:'button',

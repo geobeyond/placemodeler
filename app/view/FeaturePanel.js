@@ -4,6 +4,7 @@ Ext.define('PM.view.FeaturePanel', {
     extend: 'Ext.panel.Panel',
     border:false,
 
+
     items:[{
         xtype: 'fieldset',
         title: 'Dati',

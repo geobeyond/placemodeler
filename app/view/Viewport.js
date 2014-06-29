@@ -55,8 +55,10 @@ Ext.define('PM.view.Viewport', {
                     region: 'south',
                     xtype: 'tabpanel',
                     id: 'southPanel',
+                    titleCollapse:true,
+                    hideCollapseTool: true,
                     collapsible: true,
-                    collapsed: false,
+                    collapsed: true,
                     autoScroll: true,
                     height:400,
                  //   maxHeight:200,
@@ -88,11 +90,12 @@ Ext.define('PM.view.Viewport', {
                         xtype: 'form',
                         title: 'Editing',
                         autoScroll: true,
-                    //    layout: 'fit',
+                        //    layout: 'fit',
                         items:[{
-                        xtype: 'featurepanel'
+                            xtype: 'featurepanel',
+                            id: 'southFeaturePanel'
                         }]
-                      //  border: true
+                        //  border: true
 
                      //   width: 300,
                        // height:200,
@@ -110,13 +113,12 @@ Ext.define('PM.view.Viewport', {
                         xtype: 'panel',
                         title: 'Media Gallery',
                         html: 'galleria media???',
+                        id: 'southMediaPanel',
                         border: true,
                         //title: 'media',
                         width: 400,
                         height:100
                     }]
-
                 }]
             }]
-
 });

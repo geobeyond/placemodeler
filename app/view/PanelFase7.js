@@ -4,7 +4,7 @@ Ext.define('PM.view.PanelFase7', {
 
     title: 'Fase 7',
     autoScroll: true,
-    
+
     layout: {
         type: 'vbox',
         align : 'stretch'
@@ -14,6 +14,18 @@ Ext.define('PM.view.PanelFase7', {
         xtype: 'container',
         cls: 'tree',
         margin: 5
-    }]
+    },{
+	xtype:'button',
+	text: '<i class="fa fa-comment"></i> Invia il questionario',
+	tooltip: "Invia gli elementi selezionati",
+        margin: '20 5 5 5' ,
+        disabled: true
+    }],
+
+    openReportWindow: function(){
+        Ext.create('PM.view.ReportWindow', {
+	    id: 'reportFase7'
+	}).show();
+    }
 
 });
