@@ -1,17 +1,23 @@
 Ext.define('PM.view.ProjectWindow', {
   
-  extend: 'Ext.window.Window',  
+  extend: 'Ext.window.Window',
+  
   alias: 'widget.projectwindow',
   
   border:false,
+
+//    layout: 'fit',
+   // height: 100,
+  //  width: 400,
+
+    padding:5,
     
     title: 'Progetti',
     
     layout: {
       type: 'hbox',
-      defaultMargins: 5,
-      pack: 'center',
-      align: 'middle'
+      pack: 'start',
+      align: 'stretch'
     },
      closeAction: 'hide',
     items:[{
@@ -21,7 +27,7 @@ Ext.define('PM.view.ProjectWindow', {
     },{
       xtype: 'combo',
       fieldLabel: 'o scegli progetto esistente:',
-      labelWidth: 168,
+      labelWidth: 165,
       store: 'Projects',
       id: 'npCombo',
       displayField: 'nome',

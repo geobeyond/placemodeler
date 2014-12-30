@@ -244,7 +244,6 @@ this.map.addControl(panel);
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
-		id: 'dockedTopMap',
                 items: that.toolbarItems
             }]
         });

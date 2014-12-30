@@ -10,9 +10,6 @@ Ext.define('PM.controller.Settings', {
     },{
 	ref: 'projectsCombo',
 	selector: 'combo[id=settingsProjectsCombo]'
-    },{
-        ref: 'mapTbar',
-	selector: 'toolbar[id=dockedTopMap]'
     }],
     
     init: function(){
@@ -29,7 +26,8 @@ Ext.define('PM.controller.Settings', {
     onSettingsClick: function(){
       this.getTab().setActiveTab(0);
     },
-        
+    
+    
     onChangeProjectCombo: function(e, idProject, oldValue, eOpts){
       var that = this;
          Ext.MessageBox.show({
@@ -46,20 +44,8 @@ Ext.define('PM.controller.Settings', {
 		    idProject: idProject
 		  },
 		  success: function(res){
-		    var combo = that.getProjectsCombo();
-		    var comboValue = combo.getValue(); 
-		    var record = combo.findRecordByValue(comboValue);
-		    combo.getStore().remove(record);
-		    combo.clearValue();
-		    var mainCnt = PM.app.getController('Main');
-		    if (comboValue == mainCnt.idProject)
-		    {
-			 var mainProject = PM.app.getController('Project');
-		         mainProject.updateTitle('');
-			 mainProject.setLastProject(-1);
-			 mainCnt.idProject = false;
-			 that.getMapTbar().setDisabled(true); 
-		    }
+		    var store = that.getProjectsCombo().store;
+		    that.getProjectsCombo().store.removeAt(0);
 		  }
 		});
 	      }

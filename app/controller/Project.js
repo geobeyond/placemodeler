@@ -22,12 +22,10 @@ Ext.define('PM.controller.Project', {
     },{
       ref: 'npCombo',
       selector: 'combo[id=npCombo]'
-    },{
+    },
+    {
       ref: 'title',
       selector: 'northpanel > component'
-    },{
-        ref: 'mapTbar',
-	selector: 'toolbar[id=dockedTopMap]'
     }],
     
     
@@ -61,24 +59,21 @@ Ext.define('PM.controller.Project', {
 	  break;
 	}
       }
-      this.getMapTbar().setDisabled(false);
-      this.setLastProject(newValue);     
-//       this.getWin().close();
-    }, 
-    
-    setLastProject: function(id){
-            //salva newValue in tabella users
+      //salva newValue in tabella users
       	Ext.Ajax.request({
 	  url: PM.Config.getUrls().setLastProject,
 	  params:{
 	   user_id: PM.app.getController('Main').userId,
-	   last_project: id
+	   last_project: newValue
 	  },
 	  success: function(res){
 	    ;
 	  }	  
 	});
-    },
+      
+      
+//       this.getWin().close();
+    }, 
     
     onNewProjectClick: function(){
        this.getWin().NewProjWinShow();
@@ -116,8 +111,7 @@ Ext.define('PM.controller.Project', {
 	      PM.app.getController('Main').idProject = res.id;
 	      that.applyFilter(res.id);
 	      that.updateTitle(nome);
-	      that.setLastProject(res.id); 
-	      that.getMapTbar().setDisabled(false);
+	      
 	    }
 	    nomeV.reset();
 	    descV.reset();
@@ -176,7 +170,12 @@ Ext.define('PM.controller.Project', {
 	  }			 
 	});		 			
     },
-        
+    
+//     setProject: function(id, name){
+//       this.updateTitle(name);
+//       // this.getNpCombo().setValue(id);
+//     },
+    
     updateTitle: function(name){
       this.getTitle().update('<div id="title">Div@ter > '+name+'</div>');
     }

@@ -74,7 +74,6 @@ $db->commit();
 	      echo json_encode($resArr);
        } 
     }
-   
     else
     {
       echo json_encode($resArr);

@@ -5,17 +5,18 @@ Ext.define('PM.Config', {
     config : {
 	urls: {
 	  
-	    server: 'http://89.31.77.165', 
+	 
+	    server: 'http://palestrina.divater.it', 
 	   
-	    serverGeo: 'http://89.31.77.165', 
+	    serverGeo: 'http://89.31.77.165',
 	   
-	    ushahidiURL: '/ushahidi-v2/api',
-	    ushahidiUploads: '/ushahidi-v2/media/uploads/',
+	    ushahidiURL: '/api',
+	    ushahidiUploads: '/media/uploads/',
 	    
 	    getCapabilities: '/geoserver/ows?service=wms&request=GetCapabilities',
-	    sld: '/divater/pm6/pm/php/getSLD.php?sld=../pm_phase2.sld',
+	    sld: '/pm/php/getSLD.php?sld=../pm_phase2.sld',
 	    
-	    geoserver: '/geoserver/divater',
+	    geoserver: '/geoserver/palestrina',
 	  
 	    //wpsClient: '/geoserver/wps',
 	    
@@ -39,8 +40,8 @@ Ext.define('PM.Config', {
 
 	wfsParams:{
 	    srsName: 'EPSG:4326',
-	    featureNS: 'http://89.31.77.165/',
-	    featurePrefix: 'divater',
+	    featureNS:  'http://palestrina.divater.it/', //'http://89.31.77.165',
+	    featurePrefix: 'palestrina',
 	    geometryName: 'the_geom',
 	    version: '1.1.0',
 	    

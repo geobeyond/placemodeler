@@ -1,9 +1,9 @@
 <?php
-define('SYSPATH', '/var/www/divater/gaeta/ushahidi-v2/system/'); //cambia il path..
+define('SYSPATH', '/var/www/ushahidi-v2/system/'); //cambia il path..
 
 require_once('./check.php');
 require_once('./global.php');
-require('/var/www/divater/gaeta/ushahidi-v2/application/config/auth.php');
+require('/var/www/ushahidi-v2/application/config/auth.php');
 
 $res = array();
 
