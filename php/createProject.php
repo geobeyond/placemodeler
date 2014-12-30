@@ -35,9 +35,11 @@ $db->commit();
     curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
     
     curl_setopt($ch, CURLOPT_RETURNTRANSFER,TRUE);
-
+//  print $apiUrl;
     $output = curl_exec($ch);
     $resArr= json_decode($output, true);
+    
+//  var_dump($resArr);
     if ($resArr['error']['code']=='0'){
       if (curl_errno($ch)) {
 	      print curl_error($ch);

@@ -1,15 +1,29 @@
 <?php
 
-$db=new PDO('mysql:host=localhost;dbname=ushahidi_v2','root','lynxbinario');
 
-$targetMedia='/var/www/divater/pm7/pm';
+#credenziali per accesso al database di ushahidi_v2_gaeta
+$db=new PDO('mysql:host=localhost;dbname=ushahidi_v2_gaeta','root','lynxbinario');
 
-//$relativeMediaPath='/pm5/pm/media/';
-$mediaDir='/media/';
 
-$apiUrl = 'http://localhost/ushahidi-v2/api'; 
+# path assoluto della directory del client
+$targetMedia='/var/www/divater/gaeta/pm';
+
+
+
+
+#per $apiUrl settare una url differente dalla url del server
+#perché ciò è necessario per poter utilizzare il proxy.
+$apiUrl = 'http://gaeta_ushahidi.divater.it/api'; 
+
+#credenziali di autenticazione per geoserver
 $user = 'admin';
 $password  = 'Divater100!';
+
+
+
+##############non modificare#########################
+
+$mediaDir='/media/';
 
 $sottocategorie = array(
   'Rilievo Nominale',
