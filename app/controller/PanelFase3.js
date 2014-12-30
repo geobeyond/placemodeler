@@ -10,7 +10,4 @@ Ext.define('PM.controller.PanelFase3', {
         });
     },
 
-    disableComponents: function(){
-    }
-
 });

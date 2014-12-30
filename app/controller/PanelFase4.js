@@ -13,7 +13,7 @@ Ext.define('PM.controller.PanelFase4', {
         selector: 'panelFase4'
     },{
     	ref: 'button',
-        selector: 'panelFase4 > button'
+        selector: 'button[id=btnReport4]'
     },{
         ref: 'windowForm4',
         selector: 'reportwindow[id=reportFase4] > form > fieldset'
@@ -21,24 +21,19 @@ Ext.define('PM.controller.PanelFase4', {
 
     init: function(){
         this.control({
-            'panelFase4 > button':{
+            'button[id=btnReport4]':{
                 click: this.onButtonClick
             },
             'reportwindow[id=reportFase4]': {
-	        show: this.onShowWindow,
-                close: this.onCloseWindow
+	        show: this.onShowWindow
 	    }
         });
     },
 
     onButtonClick: function(){
         this.getPanelFase4().openReportWindow();
-        this.disableComponents(true);
     },
 
-    onCloseWindow: function(){
-        this.disableComponents(false);
-    },
 
     onShowWindow: function(window){
         window.setTitle('Questionario 4');
@@ -47,9 +42,6 @@ Ext.define('PM.controller.PanelFase4', {
 
     },
 
-    disableComponents: function(value){
-        this.getButton().setDisabled(value);
-    }
 
 
 });

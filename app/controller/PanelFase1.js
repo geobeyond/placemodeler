@@ -15,35 +15,26 @@ Ext.define('PM.controller.PanelFase1', {
         selector: 'reportwindow[id=reportFase1] > form'
     },{
         ref: 'button',
-        selector: 'panelFase1 > button'
+        selector: 'button[id=btnReport0]'
     }],
 
     init: function(){ this.control({
-        'panelFase1 > button': {
+        'button[id=btnReport0]': {
             click: this.onBtnClick
         },
 	'reportwindow[id=reportFase1]': {
 	    show: this.onShowWindow,
-            close: this.onCloseWindow
 	}
     });
                     },
 
     onBtnClick: function(){
         this.getPanelfase1().openReportWindow();
-        this.disableComponents(true);
     },
 
-    onCloseWindow: function(){
-        this.disableComponents(false);
-    },
 
     onShowWindow: function(){
         var fid=this.getMappanel().selectedFeature.fid;
 	PM.app.getController('Report').customReport('customforms', 'meta', 1, fid, this.getWindowForm());
     },
-
-    disableComponents: function(value){
-        this.getButton().setDisabled(value);
-    }
 });

@@ -1,6 +1,38 @@
+//custom accordion 
+Ext.define('PM.application.view.CustomAccordion', {
+    extend: 'Ext.layout.container.Accordion',
+    alias: ['layout.customaccordion'] ,
+
+    constructor: function() {
+	var me = this;
+	me.callParent(arguments);  
+    },    
+    
+    
+    onComponentExpand: function(comp) {   
+	var controller=PM.app.getController('Map');
+	//controller.closeLegendWindow();
+	controller.closeInfoPopup();
+
+ 	if (controller.highlightWpsLayerAdded)	  
+ 	  controller.removeWpsLayer();
+        var me = this;
+	me.callParent(arguments);
+    },
+    onComponentCollapse: function(comp) {	
+       	if (comp.num===5 || comp.num===8)
+	{
+	  PM.app.getController('SouthPanel').clearData();
+	}    
+	var me = this;
+	me.callParent(arguments);
+    }
+});
+
 Ext.define('PM.view.Viewport', {
     extend: 'Ext.container.Viewport',
     requires:['PM.view.MapPanel',
+	      'PM.view.NorthPanel',
               'PM.view.PanelFase1',
               'PM.view.PanelFase2',
               'PM.view.PanelFase3',
@@ -9,30 +41,26 @@ Ext.define('PM.view.Viewport', {
               'PM.view.PanelFase6',
               'PM.view.PanelFase7',
               'PM.view.PanelFase8',
-
-              'PM.view.SouthFeaturePanel'
+	      'PM.view.ReportWindow',
+	      'PM.view.ModifyFeatureWindow',
+              'PM.view.SouthTabPanel',
+	      'PM.view.InfoPopup'
              ],
     alias:'widget.pm-viewport',
 
     layout:{
         type: 'border'
     },
-    items:[/*{
+    items:[{
             region: 'north',
-            layout: 'fit',
-            height: 20,
-            items:[{
-	    xtype: 'text',
-	    text: 'DIVATER',
-	    style:{
-
-	    }
-            }]
-            },*/{
+	    items:[
+	      {xtype: 'northpanel'}      
+	    ]
+            },{
                 region: 'west',
                 id: 'west',
                 title: "Simboli",
-	        layout: 'accordion',
+	        layout: 'customaccordion',
                 collapsible: true,
                 width: 250,
 	        items:[{xtype:'panelFase1'},
@@ -53,72 +81,12 @@ Ext.define('PM.view.Viewport', {
                     xtype: 'mappanel'
                 },{
                     region: 'south',
-                    xtype: 'tabpanel',
+                    xtype: 'southtabpanel',
                     id: 'southPanel',
-                    titleCollapse:true,
-                    hideCollapseTool: true,
-                    collapsible: true,
-                    collapsed: true,
-                    autoScroll: true,
-                    height:400,
-                 //   maxHeight:200,
-                    width:800,
-                   // layout: 'border',
-                    /*items:[{
-                        region: 'center',
-                        border: true,
-                        height: 200,
-                        width:200
-                    },{
-                        region: 'right',
-                        height:200,
-                        width:200,
-                        border: true
-                    }]*/
-
-                    /*layout: {
-                        type: 'vbox',
-                        pack: 'start',
-                        align: 'stretch'
-                    },*/
-                    /*items: [
-                        {html:'panel 1',  border: true,height:100},
-                        {html:'panel 2', width:150, border:true, height:400},
-                        {html:'panel 3',  border: true, height:100}
-                    ]*/
-                    items:[{
-                        xtype: 'form',
-                        title: 'Editing',
-                        autoScroll: true,
-                        //    layout: 'fit',
-                        items:[{
-                            xtype: 'featurepanel',
-                            id: 'southFeaturePanel'
-                        }]
-                        //  border: true
-
-                     //   width: 300,
-                       // height:200,
-                        /*layout:{
-	                    type:'table',
-	                    columns: 3,
-	                    border:true,
-	                    tdAttrs:{
-	                        style:{padding:'4px'}
-	                    }
-
-                        },*/
-                      //  flex:1
-                    },{
-                        xtype: 'panel',
-                        title: 'Media Gallery',
-                        html: 'galleria media???',
-                        id: 'southMediaPanel',
-                        border: true,
-                        //title: 'media',
-                        width: 400,
-                        height:100
-                    }]
+                    animCollapse: false,
+		    collapsible: true,
+		    hideCollapseTool: false,
+		    hidden: true
                 }]
             }]
 });

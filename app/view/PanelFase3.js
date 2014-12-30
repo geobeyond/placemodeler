@@ -4,7 +4,7 @@ Ext.define('PM.view.PanelFase3', {
 
     title: 'Fase 3',
     autoScroll: true,
-    
+    num:3,
     layout: {
         type: 'vbox',
         align : 'stretch'
@@ -14,7 +14,12 @@ Ext.define('PM.view.PanelFase3', {
         xtype: 'container',
         cls: 'tree',
         margin: 5
-    }],
+    },{
+	  xtype: 'panel',
+	  scrollable: true, 
+	  border: true, 
+	  margin: 5	   
+	}],
 
     openGetCapabiliesWindow: function(f){
         if(!this.sWin && typeof sWin==='undefined')

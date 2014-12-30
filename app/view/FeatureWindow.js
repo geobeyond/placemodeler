@@ -3,12 +3,13 @@ Ext.define('PM.view.FeatureWindow', {
     alias: 'widget.featurewindow',
     extend: 'Ext.window.Window',
 
-    requires:['PM.view.FeaturePanel'],
+    requires:['PM.view.FeaturePanel','PM.view.MediaPanel'],
 
     border:false,
 
-    layout: 'fit',
-
+//    layout: 'fit',
+    height: 500,
+    autoScroll:true,
     padding:5,
 
     feature: null,
@@ -16,21 +17,15 @@ Ext.define('PM.view.FeatureWindow', {
     items:[{
         xtype: 'form',
         autoScroll: true,
+        standardSubmit: false,
 
         items:[{
-	    xtype: 'featurepanel',
-            layout: 'fit'
+	    xtype: 'featurepanel'
 	},{
-            xtype: 'fieldset',
-            title: 'Media',
-            items:[{
-                xtype:'button',
-                id:'addMedia',
-                text: 'aggiungi foto e video',
-                margin: '10 0 15 5'
-            }]
-        }]
-    }],
+            xtype: 'mediapanel'
+           }]
+        }],
+
     buttonAlign: 'left',
     buttons:[{
         text: 'Salva'
@@ -38,22 +33,7 @@ Ext.define('PM.view.FeatureWindow', {
         text: 'Annulla'
     }],
 
-
     openMediaWindow: function(){
-        Ext.create('Ext.window.Window',{
-	    title : "Upload images/video",
-            id: 'mediaWindow',
-	    width : 500,
-	    height: 300,
-	    layout : 'fit',
-            //  modal: true,
-	    items : [{
-		xtype : "component",
-		autoEl : {
-		    tag : "iframe",
-		    src : "fileUpload.php?fid=prova.20"//+feature.fid
-		}
-	    }]
-        }).show();
+      Ext.create('PM.view.MediaWindow', {}).show();
     }
 });

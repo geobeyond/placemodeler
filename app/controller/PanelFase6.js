@@ -16,7 +16,4 @@ Ext.define('PM.controller.PanelFase6', {
         });
     },
 
-    disableComponents: function(value){
-       
-    }
 });

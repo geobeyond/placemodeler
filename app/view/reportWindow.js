@@ -72,11 +72,12 @@ Ext.define('PM.view.ReportWindow', {
 		    xtype:'datefield',
 		    id: 'incident_date',
 		    name: 'incident_date',
-		    fieldLabel: 'Data'
+		    fieldLabel: 'Data',		    
 	        },{
 		    xtype:'timefield',
 		    id: 'incident_time',
 		    name: 'delete',
+		    format: 'H:i',
 		    fieldLabel: 'Ora'
 	        }]
             },{
@@ -102,7 +103,9 @@ Ext.define('PM.view.ReportWindow', {
 		name: 'incident_category',
 		value: '4'
 	    }]
-        }],
+        },{
+	  xtype: 'mediapanel'
+	}],
 
         buttonAlign: 'left',
         buttons:[{

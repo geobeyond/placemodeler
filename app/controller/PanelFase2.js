@@ -13,44 +13,38 @@ Ext.define('PM.controller.PanelFase2', {
     },{
         ref: 'panelfase2',
 	selector: 'panelFase2'
-    },{
+    },/*{
         ref: 'radiogroupFase2',
         selector: 'panelFase2 > radiogroup'
-    },{
+    },*/{
         ref: 'window',
         selector: 'reportwindow[id=reportFase2]'
     },{
         ref: 'windowForm2',
         selector: 'reportwindow[id=reportFase2] > form > fieldset'
-    }],
+    }/*,{
+       ref: 'menuFase2',
+       selector: 'splitbutton[id=splitFase2] > menu'
+    }*/],
 
     init: function(){
         this.control({
-            'panelFase2 > radiogroup':{
-	        afterrender: this.onAfterRenderRadioGroupFase2,
-                change: this.onRadioChange
-            },
-	    'panelFase2 > button':{
+	    'splitbutton[id=splitFase2] > menu': {
+	       click: this.onClickMenu
+	    },
+	    'panelFase2 > button': {
                 click: this.onBtnClick
             },
 	    'reportwindow[id=reportFase2]': {
-	        show: this.onShowWindow,
-                close: this.onCloseWindow
+	        show: this.onShowWindow
 	    }
         });
     },
-
-    disableComponents: function(v){
-        this.getButton().setDisabled(v);
-        this.getRadiogroupFase2().setDisabled(v);
-    },
-
-    onAfterRenderRadioGroupFase2: function(){
-	PM.app.getController('Report').customReport('customforms', 'all', '',null,null);
-    },
-
-    onRadioChange: function(o, v){
-        this.getButton().setDisabled(false);
+    
+    onClickMenu: function(menu, item, e, opts){
+      this.menuValue=item.inputValue;
+      this.menuText=item.text;
+      this.getPanelfase2().openReportWindow();
     },
 
 
@@ -60,24 +54,11 @@ Ext.define('PM.controller.PanelFase2', {
 
 
     onShowWindow: function(window){
-        var radiogroup=this.getRadiogroupFase2();
-        var formId=radiogroup.getValue().radioFase2;
-        var title='';
-        for (var i=0; i < radiogroup.items.items.length; i++)
-        {
-	    if (radiogroup.items.items[i].value===true)
-	    {
-	        title=radiogroup.items.items[i].boxLabel;
-	    }
-        }
-        window.setTitle(title);
+        window.setTitle(this.menuText);
+	
         var fid=this.getMappanel().selectedFeature.fid;
-        PM.app.getController('Report').customReport('customforms', 'meta', formId, fid, this.getWindowForm2());
-
-        this.disableComponents(true);
+        PM.app.getController('Report').customReport('customforms', 'meta', this.menuValue, fid, this.getWindowForm2());
     },
 
-    onCloseWindow:function(){
-        this.disableComponents(false);
-    }
+
 });

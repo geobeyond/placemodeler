@@ -12,15 +12,37 @@ Ext.define('PM.controller.Report', {
         ref: 'mappanel',
         selector:'mappanel'
     },{
+       ref: 'menuFase2',
+       selector: 'splitbutton[id=splitFase2] > menu'
+    },/*{
         ref: 'radiogroupFase2',
         selector: 'panelFase2 > radiogroup'
+    },*/{
+	ref: 'mediaPanel',
+	selector: 'reportwindow mediapanel'
+    },{
+        ref: 'linkField',
+        selector: 'mediapanel textfield[id=mediaLinkField]'
+    },{
+	ref: 'linkButton',
+	selector: 'mediapanel button[id=mediaLinkBtn]'
+    },{
+	ref: 'fileButton',
+	selector: 'mediapanel filefield'
+    },{
+        ref: 'grid',
+        selector: 'mediapanel grid'
+    },{
+        ref: 'datefield',
+	selector: 'datefield[id=incident_date]'
+    },{
+        ref: 'timefield',
+	selector: 'timefield[id=incident_time]'
     }],
-
-
 
     init: function(){
         this.control({
-	    'reportwindow button[text=Annulla]': {
+	    'reportwindow button[text=Annulla]': {	
 	        click: this.onClickAnnullaBtn
 	    },
 	    'reportwindow button[text=Invia Report]': {
@@ -28,11 +50,14 @@ Ext.define('PM.controller.Report', {
 	    },
             'reportwindow > form':{
                 afterrender: this.onAfterRenderWindowForm
-            }
+            },
+	    'reportwindow':{	        
+		close: this.onCloseWindow
+	    }
         });
 
-	if (PM.Config.getUrls().proxyNative && typeof PM.Config.getUrls().proxyNative!=='undefined')
-	    this.localUrl=PM.Config.getUrls().proxyNative+encodeURIComponent(PM.Config.getUrls().ushahidiURL);
+	if (PM.Config.getUrls().proxy && typeof PM.Config.getUrls().proxy!=='undefined')
+	    this.localUrl=PM.Config.getUrls().proxy+encodeURIComponent(PM.Config.getUrls().ushahidiURL);
 	else
 	    this.localUrl=PM.Config.getUrls().ushahidiURL;
 
@@ -42,7 +67,10 @@ Ext.define('PM.controller.Report', {
 	    this.ushahidiUrl=PM.Config.getUrls().ushahidiURL;
     },
 
-
+    onCloseWindow: function() {
+	this.getGrid().getStore().removeAll();
+    },
+    
     onAfterRenderWindowForm: function(){
         //dominio
         var domain=document.domain.split('.');
@@ -52,18 +80,48 @@ Ext.define('PM.controller.Report', {
             if (!domain[0].match(/\d+/g))
                 thirdDomain=domain[0];
         }
-        Ext.getCmp('location_name').setValue(thirdDomain);
+        Ext.getCmp('location_name').setValue(thirdDomain);	
+	
+	//ora e data
+	var date = new Date();
+	this.getDatefield().setValue(date);
+	var minutes=date.getMinutes();
+	if (minutes<10)
+	  minutes='0'+minutes;
+	this.getTimefield().setValue(date.getHours()+':'+minutes);
     },
 
     onClickAnnullaBtn: function(){
-        this.getForm().form.reset();
-        //this.getWindow().close();
+      var that=this;
+              Ext.MessageBox.show({
+            title:'Cancella informazioni',
+            msg: 'Sei sicuro di voler cancellare le informazioni del report?',
+            buttons: Ext.MessageBox.YESNO,
+	    buttonText:{yes: 'Si'},
+            icon: Ext.MessageBox.QUESTION,
+	    fn :function(btn){
+	      if (btn==='yes'){
+		that.getForm().form.reset();
+		PM.app.getController('MediaPanel').clearGridStore();	
+	      }
+	    }
+	});
     },
 
 
     onClickInviaBtn: function(){
         var that=this;
-      	var values=this.getForm().form.getValues();
+	
+	 Ext.MessageBox.show({
+            title:'Invia report',
+            msg: 'Sei sicuro di voler inviare il report?',
+            buttons: Ext.MessageBox.YESNO,
+	    buttonText:{yes: 'Si'},
+            icon: Ext.MessageBox.QUESTION,
+	    fn :function(btn){
+	      if (btn==='yes'){
+		
+      	var values=that.getForm().form.getValues();
 	if (values.delete && typeof values.delete!=='undefined')
 	{
 	    var time=values.delete;
@@ -77,18 +135,19 @@ Ext.define('PM.controller.Report', {
 	    Ext.getCmp('submitForm-min').setValue(min);
 	}
 
-        var mappanel=this.getMappanel();
+        var mappanel=that.getMappanel();
 	var center=mappanel.map.getCenter();
 	center=center.transform(mappanel.sphericMercator, mappanel.WGS84);
 
 
 
 	var geom=mappanel.selectedFeature.geometry;
+	var t=0;
 	var lonlatclone = geom.clone();
 	lonlatclone.transform(mappanel.sphericMercator, mappanel.WGS84);
 
 
-       var geomCmp=Ext.getCmp('geomItem');
+	var geomCmp=Ext.getCmp('geomItem');
         if (!geomCmp && typeof geomCmp==='undefined')
         {
 	    var items=[{
@@ -108,62 +167,73 @@ Ext.define('PM.controller.Report', {
 	        value: center.lon
 	    }];
 
-	    this.getForm().add(items);
+	    that.getForm().add(items);
         }
         else
         {
             geomCmp.setValue('{"geometry":"'+lonlatclone.toString()+'","label":"","comment":"","lat":"","lon":"","color":"","strokewidth":"2.5"}');
             Ext.getCmp('latItem').setValue(center.lat);
             Ext.getCmp('lonItem').setValue(center.lon);
-        }
-
-
-
-        this.getForm().submit({
-	    clientValidation: true,
-            url:that.localUrl,
-	    success: function(form, action){console.log('success');},
-	    failure: function(form, action){ //manda sempre failure anche se l'invio e' ok!
-                if (action.result)
-                {
-                    if (action.result.error)
-                    {
-                        if (action.result.error.code==='0')
-                        {
-                            Ext.Msg.alert({
-                                title:'Invio riuscito',
-                                msg: 'Report inviato correttamente',
-                                buttons: Ext.Msg.OK,
-                                icon: Ext.Msg.INFO,
-                                fn: function(){that.getWindow().close();}
-                            });
-                        }
-                        else
-                        {
-                            Ext.Msg.alert({
-                                title:'Invio non riuscito!',
-                                msg: action.result.error.message,
-                                buttons: Ext.Msg.OK,
-                                icon: Ext.Msg.ERROR
-                            });
-                        }
-                    }
-                    else
-                    {
-                        Ext.Msg.alert({
-                            title:'Invio in coda...',
-                            msg: 'invio messo in coda di attesa.',
-                            buttons: Ext.Msg.OK,
-                            icon: Ext.Msg.INFO
-                        });
-                    }
-                }
+        }	
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(){
+            if (xhr.readyState == 4) {
+		that.mask.hide();
+		Ext.Msg.alert({
+		    title: 'Invio riuscito',
+		    msg: 'Report inviato correttamente',
+		    buttons: Ext.Msg.OK,
+		    icon: Ext.Msg.INFO,
+		    fn: function(){			
+			that.getWindow().close();
+		    }
+		});
+		/*	saveFeatureController.mask.hide();
+                 saveFeatureController.infoMsg('Salvataggio effettuato', 'Il simbolo &egrave; stato correttamente salvato',
+                 function(){	
+                 });*/
             }
-        });
+        };
+	var form=that.getForm().form;
+	var values = form.getValues();
+
+	var formData=PM.app.getController('MediaPanel').formData;
+	if (formData)
+	{
+	    var keys=Object.keys(values);		   
+	    for (var i=0; i<keys.length; i++)
+	    {
+                formData.append(keys[i], values[keys[i]]);
+	    }
+	}
+
+	
+	that.mask= new Ext.LoadMask(that.getWindow(), {msg: 'Attendi il termine del caricamento...'});
+	that.mask.show();
+	xhr.open('POST', that.localUrl, true);
+	xhr.send(formData);
+	  }
+	    }
+      });
     },
 
     customReport: function(task, by, formId, fid, window){
         var that=this;
+
+	/*if (by!=='all'){
+	      if (formId!==4)
+	     {
+	     this.getLinkField().hide();
+	     this.getLinkButton().hide();
+	     this.getFileButton().show();
+	     }
+	     else {	
+	     this.getLinkField().show();
+	     this.getLinkButton().show();
+	     this.getFileButton().hide();		    
+	     }
+	}*/
+	
         Ext.Ajax.request({
 	    url: that.ushahidiUrl,
 	    params: {
@@ -175,11 +245,11 @@ Ext.define('PM.controller.Report', {
 	        res=Ext.JSON.decode(response.responseText);
 		var error=res.error;
 		var payload=res.payload;
-		if (PM.Config.getUrls().proxy && typeof PM.Config.getUrls().proxy!=='undefined')
-		{
-		    error=res.contents.error;
-		    payload=res.contents.payload;
-		}
+		/*if (PM.Config.getUrls().proxy && typeof PM.Config.getUrls().proxy!=='undefined')
+		 {
+		 error=res.contents.error;
+		 payload=res.contents.payload;
+		 }*/
 	        if (error.code!=='0')
 	        {
                     Ext.Msg.alert({
@@ -188,35 +258,46 @@ Ext.define('PM.controller.Report', {
                         buttons: Ext.Msg.OK,
                         icon: Ext.Msg.ERROR
                     });
+		    return false;
 	        }
 	        else
 	        {
 	            if (by==='all')
-	            {
-	                var radiogroup=that.getRadiogroupFase2();
+	            {			
+		        var menuFase2=that.getMenuFase2();
+			for (var i=0; i < payload.customforms.length-2; i++)
+			{
+			  var elem={
+			    text: payload.customforms[i].title,
+			    inputValue: payload.customforms[i].id,
+			  }
+			 menuFase2.add(elem);
+			}
+			//that.getMenuFase2().setMenu();
+			
+	                /*var radiogroup=that.getRadiogroupFase2();
 	                for (var i=0; i < payload.customforms.length-2; i++)
 	                {
 		            var elem={
 		                boxLabel: payload.customforms[i].title,
 		                name: 'radioFase2',
-		                inputValue: payload.customforms[i].id
+		                inputValue: payload.customforms[i].id,
+			        checked: i === 0 ? true : false
 		            };
 	                    radiogroup.add(elem);
-
-	                }
+	                }*/
 	            }
 	            else
-	            {
-                        //var selectedFeature=that.getMappanel().selectedFeature;
-                        // var fid='';
-                        // if (selectedFeature && typeof selectedFeature!=='undefined')
-                        //fid=selectedFeature.fid;
-
-		        var parseFields= function (str){
-	                    var val,valori=[];
+	            { 
+			var fase=PM.app.getController('Main').fase;
+		        var parseFields = function (str){
+			    var separator=',';
+			    if (fase===4 ||fase===7)
+				separator=', ';
+	                    var val, valori=[];
 	                    val=str.split('::');
 	                    var valPredefinito=val[1];
-	                    valori=val[0].split(', ');
+	                    valori=val[0].split(separator);
 	                    return [valori,valPredefinito];
                         };
 
@@ -232,8 +313,8 @@ Ext.define('PM.controller.Report', {
                                     window.add({
                                         xtype: 'hiddenfield',
                                         value: fid,
-                                        //name:'custom_field['+field.id+']'
-                                        name: 'layer_fk'
+                                        name:'custom_field['+field.id+']'
+					//  name: 'layer_fk'
                                     });
                                 }
                                 else if (field.name==='Peso'){
@@ -308,7 +389,7 @@ Ext.define('PM.controller.Report', {
                                                     labelWidth: labelWidth,
                                                     name:'custom_field['+field.id+']',
 			                            store: parseFields(field.default)[0],
-			                         //   value: parseFields(field.default)[1],
+			                            //   value: parseFields(field.default)[1],
                                                     allowBlank: allowBlank,
                                                     editable: false
 			                           });
@@ -320,11 +401,10 @@ Ext.define('PM.controller.Report', {
 
                         //add form_id
                         window.add({
-			  xtype: 'hidden',
-			  name: 'form_id',
-			  value: formId
+			    xtype: 'hidden',
+			    name: 'form_id',
+			    value: formId
 			});
-
                         if (typeof htmlEditor!=='undefined')
                         {
                             window.add(htmlEditor);
@@ -345,5 +425,43 @@ Ext.define('PM.controller.Report', {
 	        }
 	    }
         });
+    },
+
+    getCustomFormIds: function(formId, callback) {
+	var that=this;
+	Ext.Ajax.request({
+	    url: that.ushahidiUrl,
+	    params: {
+	        task: 'customforms',
+	        by: 'meta',
+	        formid: formId		
+	    },
+	    success: function(response) {
+		res=Ext.JSON.decode(response.responseText);
+		var error=res.error;
+		var payload=res.payload;
+		if (error.code!=='0')
+	        {
+                    Ext.Msg.alert({
+                        title:'Errore!',
+                        msg: error.message,
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.Msg.ERROR,
+			fn:function() {
+			    callback(null, true);
+			}
+                    });
+	        }
+		else
+		{
+		    var ids=[];
+		    for(var i = 0; i < payload.customforms.fields.length; i++) {
+			if (payload.customforms.fields[i].name !== 'layer_fk')
+			    ids.push(payload.customforms.fields[i].id);
+		    }
+		    callback(ids, false);
+		}
+	    }
+	});
     }
 });

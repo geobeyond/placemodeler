@@ -4,7 +4,7 @@ Ext.define('PM.view.PanelFase6', {
 
     title: 'Fase 6',
     autoScroll: true,
-    
+    num:6,
     layout: {
         type: 'vbox',
         align : 'stretch'
@@ -14,6 +14,11 @@ Ext.define('PM.view.PanelFase6', {
         xtype: 'container',
         cls: 'tree',
         margin: 5
-    }]
+    },{
+	  xtype: 'panel',
+	  scrollable: true, 
+	  border: true, 
+	  margin: 5	   
+	}]
 
 });

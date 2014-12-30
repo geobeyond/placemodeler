@@ -8,6 +8,8 @@ Ext.Loader.setConfig({
     }
 });
 
+
+
 Ext.application({
     name: 'PM',
 
@@ -15,21 +17,32 @@ Ext.application({
         'PM.Config'
     ],
 
-
     controllers: [
         'Main',
 	'Map',
         'SaveFeature',
         'GetCapabilities',
         'Report',
+	'ReportQuestions',
+        'MediaPanel',
         'PanelFase1',
         'PanelFase2',
         'PanelFase3',
         'PanelFase4',
         'PanelFase5',
-        'PanelFase6',	
+        'PanelFase6',
 	'PanelFase7',
-        'PanelFase8'
+        'PanelFase8',
+	'ModifyFeature',
+	'SouthPanel',
+	'NorthPanel',
+	'Info'
+    ],
+    
+    models:['Media', 'MediaType', 'Style', 'UshahidiMedia'],
+    
+    stores: ['Files', 'MediaTypes', 'Images', 'Videos', 'Links', 'Reports', 'ReportDetails',
+      'Styles', 'UshahidiMedias'
     ],
 
     autoCreateViewport: true

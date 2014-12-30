@@ -1,0 +1,89 @@
+#title{
+  font-weight: bold;
+  font-size: 18px;
+  margin: 2px 0px 2px 30px;
+}
+
+/*riepilogo fase 5*/
+.reportTexts p{
+  font-weight: bold;
+}
+
+.desc_text{
+  font-weight: normal;
+  margin-right: 14px;
+}
+
+.reportTitle{
+  font-weight:bold;
+  font-size:16px;
+  margin: 10px;
+}
+
+/*dataview*/
+.images-view .thumbwrap {
+    padding: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.images-view .thumbwrap div.removeicon {
+    width: 16px;
+    height: 16px;
+    background-image: url("../media/delete.png");
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: none;
+    cursor: pointer;
+}
+
+.images-view .thumbwrap.thumbwrap-hover div.removeicon {
+    display: block;
+}
+
+.reportView{
+    margin: 10px;
+}
+
+.thumb1{
+    margin: 4px 10px;
+}
+.relIndex{
+  font-weight: bold;
+  font-style: normal;
+  font-variant: normal;
+  font-size: 18px;
+  line-height: normal;
+  font-family: Arial;
+}
+
+#legend{
+    font-size: 12px;
+    margin: 5px;
+}
+
+#legend tr td{
+  margin: 4px 0px 2px 0px;
+  
+}
+
+#legend tr td:last-child {
+  width: 20px;
+  border: 1px solid grey;
+}
+
+.featureInfo{
+    border: 1px solid grey;
+    margin: 5px;
+    padding: 2px;
+}
+.featureInfo p{
+    margin-left: 5px;
+}
+#headLogo{
+  height: 250px;
+  font-weight:bold;
+  font-size:42px;
+  border : 1px solid black;
+}

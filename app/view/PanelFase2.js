@@ -9,13 +9,18 @@ Ext.define('PM.view.PanelFase2', {
 
     title: 'Fase 2',
     autoScroll: true,
-
+  num:2,
     items:[
         {
             xtype: 'container',
 	    cls:'tree',
             margin: 5
-        },
+        },{
+	  xtype: 'panel',
+	  scrollable: true, 
+	  border: true, 
+	  margin: 5	   
+	}/*,
 	{
 	    xtype: 'radiogroup',
 	    margin: '20 2 2 2' ,
@@ -30,12 +35,12 @@ Ext.define('PM.view.PanelFase2', {
             margin: '20 5 5 5' ,
             disabled: true,
             enableToggle: true
-	}
+	}*/
     ],
 
     openReportWindow: function(){
         Ext.create('PM.view.ReportWindow', {
 	    id: 'reportFase2'
 	}).show();
-    },
+    }
 });

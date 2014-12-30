@@ -4,6 +4,8 @@ Ext.define('PM.view.PanelFase1', {
 
     title: 'Fase 1',
     autoScroll: true,
+    
+    num:1,
 
     layout: {
         type: 'vbox',
@@ -15,14 +17,19 @@ Ext.define('PM.view.PanelFase1', {
 	    xtype: 'container',
 	    cls:'tree',
             margin: 5
-        },
+        },{
+	  xtype: 'panel',
+	  scrollable: true, 
+	  border: true, 
+	  margin: 5	   
+	}/*,
 	{
 	    xtype:'button',
-	    text: '<i class="fa fa-comment"></i> Crea standard report',
+	    text: 'Crea standard report',
 	    tooltip: "Invia gli elementi selezionati",
             margin: '20 5 5 5' ,
             disabled: true
-	}
+	}*/
     ],
 
     openReportWindow: function(){
