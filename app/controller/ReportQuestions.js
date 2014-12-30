@@ -108,7 +108,7 @@ Ext.define('PM.controller.ReportQuestions', {
 		if (btn==='yes')
 		{
 		    Ext.Ajax.request({
-			url: '/cgi-bin/proxy.cgi.24072014?url='+PM.app.getController('Report').ushahidiUrl,
+			url: PM.Config.getUrls().proxyHostWfs+ 'http://localhost' + PM.app.getController('Report').ushahidiUrl, 
 			method: 'POST',
 			params:{
 			    task: 'reports',
@@ -148,8 +148,7 @@ Ext.define('PM.controller.ReportQuestions', {
 				msg: 'Problema durante la cancellazione del report',
 				buttons: Ext.MessageBox.OK,
 				icon: Ext.MessageBox.ERROR
-			    });
-			    
+			    });			    
 			}
 		    });
 		}

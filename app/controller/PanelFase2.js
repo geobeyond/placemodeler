@@ -45,6 +45,7 @@ Ext.define('PM.controller.PanelFase2', {
       this.menuValue=item.inputValue;
       this.menuText=item.text;
       this.getPanelfase2().openReportWindow();
+  
     },
 
 

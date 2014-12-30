@@ -69,9 +69,9 @@ Ext.define('PM.controller.SouthPanel', {
 	    }
         });
 	if (PM.Config.getUrls().proxy && typeof PM.Config.getUrls().proxy!=='undefined')
-	    this.ushahidiUrl=PM.Config.getUrls().proxy+encodeURIComponent(PM.Config.getUrls().ushahidiURL);
+	    this.ushahidiUrl=PM.Config.getUrls().proxy+encodeURIComponent(PM.Config.getUrls().server + PM.Config.getUrls().ushahidiURL);
 	else
-	    this.ushahidiUrl=PM.Config.getUrls().ushahidiURL;
+	    this.ushahidiUrl=PM.Config.getUrls().server + PM.Config.getUrls().ushahidiURL;
     },
 
     reportTypes: ['', 'Scheda Default',

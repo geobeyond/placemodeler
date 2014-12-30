@@ -36,12 +36,16 @@ Ext.application({
 	'ModifyFeature',
 	'SouthPanel',
 	'NorthPanel',
-	'Info'
+	'Info',
+	'Settings',
+	'Project'
     ],
     
-    models:['Media', 'MediaType', 'Style', 'UshahidiMedia'],
+    models:[
+	//	'Project', 
+		'Media', 'MediaType', 'Style', 'UshahidiMedia'],
     
-    stores: ['Files', 'MediaTypes', 'Images', 'Videos', 'Links', 'Reports', 'ReportDetails',
+    stores: ['Projects', 'Files', 'MediaTypes', 'Images', 'Videos', 'Links', 'Reports', 'ReportDetails',
       'Styles', 'UshahidiMedias'
     ],
 

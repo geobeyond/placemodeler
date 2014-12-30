@@ -1,9 +1,6 @@
-//OpenLayers.ProxyHost = "wfsProxy.php?url=";
-
 Ext.define('PM.controller.Main', {
 
     extend: 'Ext.app.Controller',
-
 
     refs:[{
         ref: 'viewport',
@@ -93,6 +90,8 @@ Ext.define('PM.controller.Main', {
 
     lastExpanded: null,
 
+    idProject: false,
+    
     init: function(){
       
       
@@ -361,9 +360,9 @@ Ext.define('PM.controller.Main', {
     setStyleStore: function(){
         //var url=PM.Config.getUrls().sld+'http://89.31.77.165/geoserver/rest/styles/pm_phase'+this.fase+'.sld';      
       	if (PM.Config.getUrls().proxy && typeof PM.Config.getUrls().proxy!=='undefined')
-	  var url=PM.Config.getUrls().proxy+PM.Config.getUrls().sld+'../pm_phase2.sld';
+	  var url=PM.Config.getUrls().proxy+PM.Config.getUrls().server + PM.Config.getUrls().sld;
 	else
-	  var url=PM.Config.getUrls().sld+'../pm_phase2.sld';
+	  var url=PM.Config.getUrls().server + PM.Config.getUrls().sld;
         var store=PM.app.getStore('Styles');
         store.proxy.url=url;
     },

@@ -2,10 +2,24 @@
 
 $db=new PDO('mysql:host=localhost;dbname=ushahidi_v2','root','lynxbinario');
 
-$targetMedia='/var/www/divater/pm6/pm';
+$targetMedia='/var/www/divater/pm7/pm';
 
 //$relativeMediaPath='/pm5/pm/media/';
 $mediaDir='/media/';
+
+$apiUrl = 'http://localhost/ushahidi-v2/api'; 
+$user = 'admin';
+$password  = 'Divater100!';
+
+$sottocategorie = array(
+  'Rilievo Nominale',
+  'Rilievo Percettivo',
+  'Rilievo Grafico/Fotografico/Video',
+  'Questionario fase7',
+  'Questionario fase4',
+  'Rilievo Base'
+
+);
 
 if (isset($_OST['fase']))
   $phase=intval($_POST['fase']);

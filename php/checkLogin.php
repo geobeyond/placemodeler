@@ -1,9 +1,9 @@
 <?php
-define('SYSPATH', '/var/www/ushahidi-v2/system/'); //cambia il path..
+define('SYSPATH', '/var/www/divater/gaeta/ushahidi-v2/system/'); //cambia il path..
 
 require_once('./check.php');
 require_once('./global.php');
-require('/var/www/ushahidi-v2/application/config/auth.php');
+require('/var/www/divater/gaeta/ushahidi-v2/application/config/auth.php');
 
 $res = array();
 
@@ -59,7 +59,8 @@ function hash_password($password, $salt, $salt_pattern)
 }
 
 
-$sql = $db->prepare("SELECT username, password, email FROM users WHERE username='$login'");
+$sql = $db->prepare("SELECT username, password, email, last_project, id FROM users WHERE username='$login'");
+
 $sql->execute();
 $resQuery= $sql->fetchAll();
 
@@ -85,6 +86,22 @@ if ($hash_pwd === $savedPassword)
   
   $_SESSION['username']=$resQuery[0]['username'];
   $_SESSION['email']=$resQuery[0]['email'];  
+  $_SESSION['last_project']=$resQuery[0]['last_project']; 
+  $_SESSION['id']=$resQuery[0]['id'];
+  
+  //nome progetto se last_project esiste
+  if ($resQuery[0]['last_project']!=='null')
+  {
+    $sql1 = $db->prepare("SELECT nome from progetti where id=".$resQuery[0]['last_project']);
+    
+    $sql1->execute();
+    $resQuery1= $sql1->fetchAll();
+    $_SESSION['nome'] = $resQuery1[0]['nome'];
+   
+  }
+  else
+    $_SESSION['nome']=false;
+
 }
 else
 {

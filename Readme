@@ -1,0 +1,118 @@
+Passi d'installazione del client PM Divater e di ushahidi per un nuovo comune.
+
+1) Creazione del database di ushahidi e per i dati geografici.
+
+Per l'installazione di un nuovo client per un dato comune bisogna prima replicare il database ushahidi_v2,
+da phpmyadmin, seleziona il db ushahidi_v2, poi vai su operations e copia il database
+preservando strutture e dati (opzioni di default che sono settate in phpmyadmin)
+nominandolo, 
+
+ad esempio: ushahidi_v2_nome_comune
+
+2) Creazione dei layers in geoserver
+
+Entra in geoserver come amministratore:
+
+http://89.31.77.165/geoserver (login=admin, pwd=Divater100!)
+
+crea un nuovo workspace:
+
+nome: nome_comune
+namespaceURI: http://nome_comune.divater.it/
+
+poi crea un nuovo store così configurato:
+scegli come Vector Data Source ---> Mysql
+
+e assegna i parametri per connettersi al database ushahidi_v2_nome_comune
+
+poi:
+workspace: nome_comune
+data source name: nome_comune_placemaker
+
+poi pubblica i layer:
+pm_phase1, 
+pm_phase3, 
+pm_phase6, 
+pm_phase8
+
+dal database ushahidi_v2_nome_comune avendo l'accortezza che sia:
+Declared SRS: EPSG:4326
+
+e poi vanno definiti i Bounding Boxes cliccando su:
+Compute from data e 
+Compute from native bounds
+
+e salva.
+
+
+
+3) Struttura delle directory e copia di ushahidi e del client PM
+
+Creare una dir /var/www/divater/nome_comune e
+copiare al suo interno le dir pm/ e ushahidi-v2/
+
+es.:
+cp -pr /var/www/divater/pm7/pm /var/www/divater/nome_comune
+cp -pr /var/www/ushahidi-v2 /var/www/divater/nome_comune
+
+
+4) Configurazione di ushahidi per il comune nome_comune
+
+edita il file:
+/var/www/divater/nome_comune/ushahidi-v2/application/config/database.php
+
+e setta il nome del db a ushahidi_v2_nome_comune
+
+il file:
+/var/www/divater/nome_comune/ushahidi-v2/application/config/config.php
+setta:
+$config['site_domain'] = '/';
+
+e il file: 
+/var/www/divater/nome_comune/ushahidi-v2/application/config/settings.php
+setta, ad esempio:
+'site_name' => 'Nome_comune Divater',
+
+e poi cambia nel file:
+/var/www/divater/nome_comune/ushahidi-v2/.htaccess:
+
+RewriteBase /
+
+
+5) Configurazione del client PM per il comune nome_comune
+
+per la parte javascript edita il file: 
+/var/www/divater/nome_comune/app/Config.js
+
+come configurazione essenziale settare almeno:
+server: 'http://nome_comune.divater.it'
+
+il parametro SLD: 
+sld: '/divater/nome-comune/pm/php/getSLD.php?sld='
+
+
+e i parametri wfs wfsParams:
+featureNS: 'http://nome_comune.divater.it/pm',
+featurePrefix: 'nome_comune',
+
+
+per la parte php editare:
+/var/www/divater/nome_comune/app/php/global.php:
+
+settando:
+
+#credenziali per accesso al database di ushahidi_v2_nome_comune
+$db=new PDO('mysql:host=localhost;dbname=ushahidi_v2_nome_comune','root','lynxbinario');
+
+# path assoluto della directory del client
+$targetMedia='/var/www/divater/nome_comune/pm';
+
+#per $apiUrl settare una url differente dalla url del server
+#perché ciò è necessario per poter utilizzare il proxy.
+$apiUrl = 'http://nome_comune_ushahidi.divater.it/api'; 
+
+
+
+
+
+

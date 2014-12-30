@@ -4,7 +4,7 @@ include('./global.php');
 require('./UploadHandler.php');
  
  
-if (isset($_POST)){ 
+if (isset($_POST['fid'])){ 
 
         $fid=intval($_POST['fid']);  
         if (isset($_POST['mediaLinks'])){

@@ -101,7 +101,7 @@ Ext.define('PM.view.ReportWindow', {
 		xtype: 'hiddenfield',
 		id:'incident_category',
 		name: 'incident_category',
-		value: '4'
+		//value: '4'
 	    }]
         },{
 	  xtype: 'mediapanel'

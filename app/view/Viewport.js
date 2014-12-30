@@ -1,4 +1,8 @@
 //custom accordion 
+
+
+OpenLayers.ProxyHost = '/cgi-bin/proxy.cgi?url=';
+
 Ext.define('PM.application.view.CustomAccordion', {
     extend: 'Ext.layout.container.Accordion',
     alias: ['layout.customaccordion'] ,
@@ -44,7 +48,9 @@ Ext.define('PM.view.Viewport', {
 	      'PM.view.ReportWindow',
 	      'PM.view.ModifyFeatureWindow',
               'PM.view.SouthTabPanel',
-	      'PM.view.InfoPopup'
+	      'PM.view.InfoPopup',
+	      'PM.view.ProjectWindow',
+	      'PM.view.SettingsWindow'
              ],
     alias:'widget.pm-viewport',
 

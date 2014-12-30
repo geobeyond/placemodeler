@@ -156,13 +156,15 @@ Ext.define('PM.controller.SaveFeature', {
 		var form=that.getForm().form;
 		if (form.isValid())
 		{
+		  var mainController = PM.app.getController('Main');
 		  var values=form.getValues();
 		  delete values.mediaLinkField;
 
 		  feature.state=OpenLayers.State.INSERT;
 		  that.saveType=OpenLayers.State.INSERT;
+		  values.id_progetto = mainController.idProject;
 		  feature.attributes=values;
-		  var fase = PM.app.getController('Main').fase;
+		  var fase = mainController.fase;
 		  
 		  switch(fase)
 		  {

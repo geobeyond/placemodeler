@@ -2,7 +2,7 @@ Ext.define('PM.view.PanelFase3', {
     extend: 'Ext.panel.Panel',
     alias : 'widget.panelFase3',
 
-    title: 'Fase 3',
+    title: '3. Analisi Tradizionale<br>',
     autoScroll: true,
     num:3,
     layout: {
@@ -18,7 +18,8 @@ Ext.define('PM.view.PanelFase3', {
 	  xtype: 'panel',
 	  scrollable: true, 
 	  border: true, 
-	  margin: 5	   
+	  margin: 5,
+	  padding: 3	   
 	}],
 
     openGetCapabiliesWindow: function(f){

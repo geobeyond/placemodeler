@@ -2,7 +2,7 @@ Ext.define('PM.view.PanelFase1', {
     extend: 'Ext.panel.Panel',
     alias : 'widget.panelFase1',
 
-    title: 'Fase 1',
+    title: '1. Analisi delle aspettative<br>',
     autoScroll: true,
     
     num:1,
@@ -21,7 +21,7 @@ Ext.define('PM.view.PanelFase1', {
 	  xtype: 'panel',
 	  scrollable: true, 
 	  border: true, 
-	  margin: 5	   
+	  margin: 5   
 	}/*,
 	{
 	    xtype:'button',
@@ -37,6 +37,5 @@ Ext.define('PM.view.PanelFase1', {
 	    title: 'Standard Report',
 	    id: 'reportFase1'
 	}).show();
-    },
-
+    }
 });

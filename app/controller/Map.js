@@ -2,19 +2,14 @@ Ext.define('PM.controller.Map', {
 
     extend: 'Ext.app.Controller',
 
-    refs:[{
+    refs:[
+    {
         ref: 'mappanel',
         selector: 'mappanel'
     },{
         ref: 'southPanel',
         selector: 'panel[id=southPanel]'
-    }/*,{
-        ref: 'modifyFeatureButton',
-        selector: 'mappanel > toolbar > button[id=modifyFeatureButton]'
-    },{
-        ref: 'southFeaturePanel',
-        selector: 'featurepanel[id=southFeaturePanel]'
-    }*/],
+    }],
 
     init: function(){
         this.control({
@@ -27,9 +22,9 @@ Ext.define('PM.controller.Map', {
             }
 	});
 	if (PM.Config.getUrls().proxy && typeof PM.Config.getUrls().proxy!=='undefined')
-	    this.ushahidiUrl=PM.Config.getUrls().proxy+encodeURIComponent(PM.Config.getUrls().ushahidiURL);
+	    this.ushahidiUrl=PM.Config.getUrls().proxy+encodeURIComponent(PM.Config.getUrls().server + PM.Config.getUrls().ushahidiURL);
 	else
-	    this.ushahidiUrl=PM.Config.getUrls().ushahidiURL;	
+	    this.ushahidiUrl=PM.Config.getUrls().server + PM.Config.getUrls().ushahidiURL;	
     },
 
 
@@ -205,6 +200,7 @@ Ext.define('PM.controller.Map', {
       Ext.create('PM.view.ModifyFeatureWindow').show();
     },
     
+    /*
     processWps: function(layer, averageIndex){
         var that=this;	
 	var mappanel = this.getMappanel();
@@ -319,6 +315,7 @@ Ext.define('PM.controller.Map', {
 	      }
 	  });          
     },
+    */
     
     getRelativeIndex: function(weight, reports){
       var quantities=0;

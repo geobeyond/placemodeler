@@ -23,7 +23,7 @@ Ext.define('PM.controller.GetCapabilities', {
 
     views:['GetCapabilitiesWindow'],
 
-    localUrl: PM.Config.getUrls().proxyHostWms+encodeURIComponent(PM.Config.getUrls().getCapabilities),
+    localUrl: PM.Config.getUrls().proxyHostWms+encodeURIComponent(PM.Config.getUrls().server + PM.Config.getUrls().getCapabilities),
 
     init: function(){
 	this.control({
@@ -42,9 +42,9 @@ Ext.define('PM.controller.GetCapabilities', {
         });
 
 	if (PM.Config.getUrls().proxyHostWms && typeof PM.Config.getUrls().proxyHostWms!=='undefined')
-	  this.localUrl=PM.Config.getUrls().proxyHostWms+encodeURIComponent(PM.Config.getUrls().getCapabilities);
+	  this.localUrl=PM.Config.getUrls().proxyHostWms+encodeURIComponent(PM.Config.getUrls().server + PM.Config.getUrls().getCapabilities);
 	else
-	  this.localUrl=PM.Config.getUrls().getCapabilities;
+	  this.localUrl=PM.Config.getUrls().server + PM.Config.getUrls().getCapabilities;
     },
 
 

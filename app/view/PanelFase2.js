@@ -7,7 +7,7 @@ Ext.define('PM.view.PanelFase2', {
         align : 'stretch'
     },
 
-    title: 'Fase 2',
+    title: '2. Individuazione nominale e <br>percettiva degli elementi<br> del luogo',
     autoScroll: true,
   num:2,
     items:[

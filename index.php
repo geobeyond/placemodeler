@@ -37,7 +37,8 @@ if ($userId){
     
     <!-- OpenLayers -->
     <link rel="stylesheet" type="text/css" href="externals/openlayers/theme/default/style.css" />    
-    <script src="externals/openlayers/lib/OpenLayers.debug.js"></script>
+      <script src="externals/openlayers/lib/OpenLayers.debug.js"></script>  
+<!--  <script src="http://dev.openlayers.org/releases/OpenLayers-2.13.1/OpenLayers.debug.js"></script>  -->
     <script src="externals/openlayers/lib/QuickHull.js"></script>
 
 

@@ -15,7 +15,7 @@ Ext.define('PM.view.MapPanel', {
 
     border: 'false',
     layout: 'fit',
-
+    
     saveStrategy1: new OpenLayers.Strategy.Save(),
     saveStrategy3: new OpenLayers.Strategy.Save(),
     saveStrategy6: new OpenLayers.Strategy.Save(),
@@ -32,7 +32,6 @@ Ext.define('PM.view.MapPanel', {
         minZoomLevel: 1,
         maxZoomLevel: 22,
         controls: [
-			//    this.navigationControl, 
 			new OpenLayers.Control.Navigation(),
 			new OpenLayers.Control.Zoom(),
 			    //new OpenLayers.Control.Zoom(),  
@@ -73,10 +72,9 @@ panel.addControls([
    new OpenLayers.Control.Zoom(),  
  
 ]);
-
 this.map.addControl(panel);
 */
-        OpenLayers.ProxyHost = PM.Config.getUrls().proxyHostWfs;
+        
 
 
 	this.selectedFeature=null;
@@ -133,10 +131,12 @@ this.map.addControl(panel);
 	    isBaseLayer: false,
 	    visibility:true,
 	    displayInLayerSwitcher:false});
+	
+	
 
   //overlays
         this.wms1= new OpenLayers.Layer.WMS(
-            "Analisi anticipatoria", PM.Config.getUrls().geoserver+'/wms',
+            "Analisi anticipatoria", PM.Config.getUrls().serverGeo + PM.Config.getUrls().geoserver+'/wms',
             {
                 LAYERS: PM.Config.getWfsParams().featurePrefix+':'+PM.Config.getWfsParams().featureTypeLayer1,
                 STYLES: 'pm_phase2',
@@ -155,7 +155,7 @@ this.map.addControl(panel);
             });
 	
         this.wms3= new OpenLayers.Layer.WMS(
-            "Analisi tradizionale", PM.Config.getUrls().geoserver+'/wms',
+            "Analisi tradizionale", PM.Config.getUrls().serverGeo + PM.Config.getUrls().geoserver+'/wms',
             {
                 LAYERS: PM.Config.getWfsParams().featurePrefix+':'+PM.Config.getWfsParams().featureTypeLayer3,
                 STYLES: '',
@@ -179,7 +179,8 @@ this.map.addControl(panel);
 	    //styleMap: sm,
 	    projection: new OpenLayers.Projection(PM.Config.getWfsParams().srsName),
 	    protocol: new OpenLayers.Protocol.WFS({
-	        url: PM.Config.getUrls().geoserver+'/wfs',
+	      proxy: OpenLayers.ProxyHost,
+	        url: 'http://localhost' + PM.Config.getUrls().geoserver+'/wfs',
 	        featureNS :   PM.Config.getWfsParams().featureNS,
 	        featureType: PM.Config.getWfsParams().featureTypeLayer1,
                 version: PM.Config.getWfsParams().version,
@@ -192,7 +193,7 @@ this.map.addControl(panel);
 	    //styleMap: sm,
 	    projection: new OpenLayers.Projection(PM.Config.getWfsParams().srsName),
 	    protocol: new OpenLayers.Protocol.WFS({
-	        url: PM.Config.getUrls().geoserver+'/wfs',
+	        url: 'http://localhost' + PM.Config.getUrls().geoserver+'/wfs',
 	        featureNS :  PM.Config.getWfsParams().featureNS,
 	        featureType: PM.Config.getWfsParams().featureTypeLayer3,
                 version: PM.Config.getWfsParams().version,
@@ -205,7 +206,7 @@ this.map.addControl(panel);
             //styleMap: sm,
             projection: new OpenLayers.Projection(PM.Config.getWfsParams().srsName),
             protocol: new OpenLayers.Protocol.WFS({
-                url: PM.Config.getUrls().geoserver+'/wfs',
+                url: 'http://localhost' + PM.Config.getUrls().geoserver+'/wfs',
                 featureNS :  PM.Config.getWfsParams().featureNS,
                 featureType: PM.Config.getWfsParams().featureTypeLayer6,
                 version: PM.Config.getWfsParams().version,
@@ -219,7 +220,7 @@ this.map.addControl(panel);
 	    //styleMap: sm,
 	    projection: new OpenLayers.Projection(PM.Config.getWfsParams().srsName),
 	    protocol: new OpenLayers.Protocol.WFS({
-	        url: PM.Config.getUrls().geoserver+'/wfs',
+	        url: 'http://localhost' + PM.Config.getUrls().geoserver+'/wfs',
 	        featureNS :  PM.Config.getWfsParams().featureNS,
 	        featureType: PM.Config.getWfsParams().featureTypeLayer8,
                 version: PM.Config.getWfsParams().version,
@@ -243,6 +244,7 @@ this.map.addControl(panel);
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
+		id: 'dockedTopMap',
                 items: that.toolbarItems
             }]
         });

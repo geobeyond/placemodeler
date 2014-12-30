@@ -2,7 +2,7 @@ Ext.define('PM.view.PanelFase7', {
     extend: 'Ext.panel.Panel',
     alias : 'widget.panelFase7',
 
-    title: 'Fase 7',
+    title: '7. Questionario di progetto',
     autoScroll: true,
     num: 7,
     layout: {

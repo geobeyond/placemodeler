@@ -48,23 +48,23 @@ Ext.define('PM.controller.Report', {
 	    'reportwindow button[text=Invia Report]': {
 	        click: this.onClickInviaBtn
 	    },
-            'reportwindow > form':{
+            'reportwindow > form': {
                 afterrender: this.onAfterRenderWindowForm
             },
-	    'reportwindow':{	        
+	    'reportwindow': {	        
 		close: this.onCloseWindow
 	    }
         });
 
 	if (PM.Config.getUrls().proxy && typeof PM.Config.getUrls().proxy!=='undefined')
-	    this.localUrl=PM.Config.getUrls().proxy+encodeURIComponent(PM.Config.getUrls().ushahidiURL);
+	    this.localUrl=PM.Config.getUrls().proxy+encodeURIComponent(PM.Config.getUrls().server + PM.Config.getUrls().ushahidiURL);
 	else
-	    this.localUrl=PM.Config.getUrls().ushahidiURL;
+	    this.localUrl=PM.Config.getUrls().server + PM.Config.getUrls().ushahidiURL;
 
 	if (PM.Config.getUrls().proxy && typeof PM.Config.getUrls().proxy!=='undefined')
-	    this.ushahidiUrl=PM.Config.getUrls().proxy+encodeURIComponent(PM.Config.getUrls().ushahidiURL);
+	    this.ushahidiUrl=PM.Config.getUrls().proxy+encodeURIComponent(PM.Config.getUrls().server + PM.Config.getUrls().ushahidiURL);
 	else
-	    this.ushahidiUrl=PM.Config.getUrls().ushahidiURL;
+	    this.ushahidiUrl=PM.Config.getUrls().server + PM.Config.getUrls().ushahidiURL;
     },
 
     onCloseWindow: function() {
@@ -72,9 +72,9 @@ Ext.define('PM.controller.Report', {
     },
     
     onAfterRenderWindowForm: function(){
-        //dominio
         var domain=document.domain.split('.');
         var thirdDomain='www';
+	
         if (domain.length>1)
         {
             if (!domain[0].match(/\d+/g))
@@ -120,20 +120,38 @@ Ext.define('PM.controller.Report', {
             icon: Ext.MessageBox.QUESTION,
 	    fn :function(btn){
 	      if (btn==='yes'){
-		
-      	var values=that.getForm().form.getValues();
-	if (values.delete && typeof values.delete!=='undefined')
-	{
-	    var time=values.delete;
-	    var pos=time.indexOf(':');
-	    var pos1=time.indexOf(' ');
-	    var hour=time.substring(0, pos);
-	    var min=time.substring(pos+1, pos1);
-	    var ampm=time.substring(pos1+1).toLowerCase();
-	    Ext.getCmp('submitForm-ampm').setValue(ampm);
-	    Ext.getCmp('submitForm-hour').setValue(hour);
-	    Ext.getCmp('submitForm-min').setValue(min);
-	}
+		 var incidentCategory = false;
+		  var values=that.getForm().form.getValues();
+		  var title = that.getWindow().title;
+		  var subs = PM.app.getController('Project').subCategories;
+	
+		  for(var z = 0; z< subs.length; z++)
+		  {
+		    if (subs[z].category_title = title)
+		    {
+		      incidentCategory = subs[z].id;
+		      break;
+		    }
+		  }
+		  
+		  if (values.delete && typeof values.delete!=='undefined')
+		  {
+		      var time=values.delete;
+		      var pos=time.indexOf(':');
+		    // var pos1=time.indexOf(' ');
+		      var hour=time.substring(0, pos);
+		      var min=time.substring(pos+1);
+		      var ampm = 'am';
+		      if (hour >=12)
+		      {
+			ampm = 'pm';
+			hour = hour - 12;
+		      }
+		    // var ampm=time.substring(pos1+1).toLowerCase();
+		      Ext.getCmp('submitForm-ampm').setValue(ampm);
+		      Ext.getCmp('submitForm-hour').setValue(hour);
+		      Ext.getCmp('submitForm-min').setValue(min);
+	      }
 
         var mappanel=that.getMappanel();
 	var center=mappanel.map.getCenter();
@@ -196,6 +214,10 @@ Ext.define('PM.controller.Report', {
         };
 	var form=that.getForm().form;
 	var values = form.getValues();
+	
+	//values.incident_category=
+	
+	values.incident_category = incidentCategory;
 
 	var formData=PM.app.getController('MediaPanel').formData;
 	if (formData)
@@ -254,7 +276,7 @@ Ext.define('PM.controller.Report', {
 	        {
                     Ext.Msg.alert({
                         title:'Errore!',
-                        msg: err.message,
+                        msg: error.message,
                         buttons: Ext.Msg.OK,
                         icon: Ext.Msg.ERROR
                     });

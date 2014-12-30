@@ -37,10 +37,7 @@ Ext.define('PM.view.ReportViewWindow', {
                                          //   '</div>',
                                            '</tpl>'
                                           )}]
-	    }/*,{
-	      title: 'Informazioni',
-	      name: 'tabInfo'
-	      }*/]
+	    }]
 	}],
 
 	buttons:[{

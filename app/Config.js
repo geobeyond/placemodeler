@@ -4,26 +4,35 @@ Ext.define('PM.Config', {
 
     config : {
 	urls: {
-	    ushahidiURL: 'http://89.31.77.165/ushahidi-v2/api',
-	    ushahidiUploads: 'http://89.31.77.165/ushahidi-v2/media/uploads/',
-	    
-	    getCapabilities: 'http://89.31.77.165/geoserver/ows?service=wms&request=GetCapabilities',
-	    sld: 'http://89.31.77.165/divater/pm6/pm/php/getSLD.php?sld=',
-	    geoserver: 'http://89.31.77.165/geoserver/divater',
-
+	  
+	    server: 'http://89.31.77.165', 
 	   
-	   // wpsClient: 'http://demo.opengeo.org/geoserver/wps',
-	    wpsClient: 'http://89.31.77.165/geoserver/wps',
+	    serverGeo: 'http://89.31.77.165', 
+	   
+	    ushahidiURL: '/ushahidi-v2/api',
+	    ushahidiUploads: '/ushahidi-v2/media/uploads/',
+	    
+	    getCapabilities: '/geoserver/ows?service=wms&request=GetCapabilities',
+	    sld: '/divater/pm6/pm/php/getSLD.php?sld=../pm_phase2.sld',
+	    
+	    geoserver: '/geoserver/divater',
+	  
+	    //wpsClient: '/geoserver/wps',
 	    
 	    saveFeature: 'php/saveFeature.php',
 	    getMedia: 'php/getMedia.php',
 	    deleteMedia: 'php/deleteMedia.php',
+	   // deleteReport: 'php/deleteReport.php',
 	   
 	    saveProject: 'php/createProject.php',
-	    getProjects: 'php/getProjects.php',
+	    getProject: 'php/getProjects.php',
 	    deleteProject: 'php/deleteProject.php',
+	    getCategories: 'php/getCategories.php',
+	    setLastProject: 'php/setLastProject.php',
+	    
+
 	  
-	    //proxy: '/cgi-bin/proxy.cgi?url=',
+	   // proxy: '/cgi-bin/proxy.cgi?url=',
 	    proxyHostWfs: '/cgi-bin/proxy.cgi?url='
 	    
 	},
@@ -36,12 +45,8 @@ Ext.define('PM.Config', {
 	    version: '1.1.0',
 	    
 	    featureTypeLayer1: 'pm_phase1',
-	    featureTypeLayer2: 'pm_phase2',
 	    featureTypeLayer3: 'pm_phase3',
-	    featureTypeLayer4: 'pm_phase4',
-	    featureTypeLayer5: 'pm_phase5',
 	    featureTypeLayer6: 'pm_phase6',
-	    featureTypeLayer7: 'pm_phase7',
 	    featureTypeLayer8: 'pm_phase8'	    
 	},
 

@@ -2,7 +2,7 @@ Ext.define('PM.view.PanelFase8', {
     extend: 'Ext.panel.Panel',
     alias : 'widget.panelFase8',
 
-    title: 'Fase 8',
+    title: '8. Costruzione mappa<br>di progetto',
     autoScroll: true,
     num: 8,
     layout: {

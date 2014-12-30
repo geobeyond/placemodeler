@@ -23,14 +23,20 @@
         html: '<div>Benvenuto Nome Cognome</div>'
     },{
         xtype: 'button',
+        text: 'Progetti'
+    },{
+        xtype: 'button',
+        text: 'Settaggi'
+    },{
+        xtype: 'button',
         text: 'Logout'
     }],
 
-    openWindow: function(){
+   /* openWindow: function(){
         this.win=Ext.create('PM.view.SettingsWindow').show();
     },
     
     closeWindow: function(){
       this.win.destroy();
-    }
+    }*/
 });
